@@ -20,4 +20,6 @@ makedocs(;
 
 deploydocs(;
     repo="github.com/tsabelmann/CANTools.jl",
+    devbranch="main",
+    target="build"
 )
