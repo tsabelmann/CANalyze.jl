@@ -4,6 +4,14 @@ function mask(::Type{T}, length::UInt8, shift::UInt8) where {T <: Unsigned}
     return T(ret)
 end
 
+function mask(::Type{T}, length::S1, shift::S2) where
+    {T <: Unsigned, S1 <: Integer, S2 <: Integer}
+
+    l = convert(UInt8, length)
+    s = convert(UInt8, shift)
+    return mask(T, l, s)
+end
+
 function mask(::Type{T}, length::UInt8) where {T <: Unsigned}
     ret = zero(T)
     if length > 0
