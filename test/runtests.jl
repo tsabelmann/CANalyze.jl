@@ -1,7 +1,9 @@
 using CANTools
 using Test
 
+@info "Starting tests..."
+
 include("Endian.jl")
+include("Mask.jl")
 
-
-@info "The unit tests are done!"
+@info "Ending tests..."
