@@ -4,4 +4,7 @@ module Utils
 
     include("Mask.jl")
     export mask, zero_mask, full_mask
+
+    include("Convert.jl")
+
 end
