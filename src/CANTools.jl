@@ -8,6 +8,8 @@ export mask, zero_mask, full_mask
 include("Variable.jl")
 using .Variable
 
+include("Message.jl")
+using .Message
 
 
 end
