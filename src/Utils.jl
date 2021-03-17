@@ -1,16 +1,7 @@
-function is_little_endian()
-    x::UInt16 = 0x0001
-    lst = reinterpret(UInt8, [x])
+module Utils
+    include("Endian.jl")
+    export is_little_endian, is_big_endian
 
-    if lst[1] == 0x01
-        return true
-    else
-        return false
-    end
+    include("Mask.jl")
+        
 end
-
-function is_big_endian()
-    return !is_little_endian()
-end
-
-
