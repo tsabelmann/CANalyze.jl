@@ -1,0 +1,4 @@
+module Variable
+
+
+end
