@@ -5,6 +5,21 @@ function Base.convert(::Type{A}, value::T) where {A <: AbstractArray{UInt8,1}, T
     return ret
 end
 
+function Base.convert(::Type{A}, value::Float16) where {A <: AbstractArray{UInt8,1}}
+    ret = reinterpret(UInt8, [value])
+    return ret
+end
+
+function Base.convert(::Type{A}, value::Float32) where {A <: AbstractArray{UInt8,1}}
+    ret = reinterpret(UInt8, [value])
+    return ret
+end
+
+function Base.convert(::Type{A}, value::Float64) where {A <: AbstractArray{UInt8,1}}
+    ret = reinterpret(UInt8, [value])
+    return ret
+end
+
 # function convert(::Type{T}, array::A, ::Type{LittleEndian}) where {T <: Integer, A <: AbstractArray{UInt8, 1}}
 #     ret = zero(T)
 #
