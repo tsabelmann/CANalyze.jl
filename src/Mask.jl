@@ -13,7 +13,12 @@ function mask(::Type{T}, length::UInt8) where {T <: Unsigned}
         end
         ret += 1
     end
-    return ret
+    return T(ret)
+end
+
+function mask(::Type{T}, length::S) where {T <: Unsigned, S <: Integer}
+    l = convert(UInt8, length)
+    return mask(T, l)
 end
 
 function mask(::Type{T}) where {T <: Unsigned}
