@@ -11,5 +11,7 @@ using .Variable
 include("Message.jl")
 using .Message
 
+include("Frame.jl")
+using .Frame
 
 end
