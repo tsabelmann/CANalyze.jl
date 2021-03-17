@@ -1,7 +1,7 @@
 function mask(::Type{T}, length::UInt8, shift::UInt8) where {T <: Unsigned}
     ret = mask(T, length)
     ret <<= shift
-    return ret
+    return T(ret)
 end
 
 function mask(::Type{T}, length::UInt8) where {T <: Unsigned}
