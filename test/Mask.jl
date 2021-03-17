@@ -73,4 +73,35 @@ using Test
             value *= 2
         end
     end
+
+    @testset "shifted_mask_1" begin
+        for i in 0:8
+            @test mask(UInt8, i, 0) == mask(UInt8, i)
+        end
+    end
+
+    @testset "shifted_mask_2" begin
+        for i in 0:16
+            @test mask(UInt16, i, 0) == mask(UInt16, i)
+        end
+    end
+
+    @testset "shifted_mask_3" begin
+        for i in 0:32
+            @test mask(UInt32, i, 0) == mask(UInt32, i)
+        end
+    end
+
+    @testset "shifted_mask_4" begin
+        for i in 0:64
+            @test mask(UInt64, i, 0) == mask(UInt64, i)
+        end
+    end
+
+    @testset "shifted_mask_5" begin
+        for i in 0:128
+            @test mask(UInt128, i, 0) == mask(UInt128, i)
+        end
+    end
+
 end
