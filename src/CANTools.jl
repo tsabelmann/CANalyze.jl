@@ -14,4 +14,10 @@ using .Message
 include("Frame.jl")
 using .Frame
 
+include("Decode.jl")
+using .Decode
+
+include("Encode.jl")
+using .Encode
+
 end
