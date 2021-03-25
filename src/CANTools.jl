@@ -8,8 +8,8 @@ export mask, zero_mask, full_mask
 include("Variables.jl")
 using .Variables
 
-include("Message.jl")
-using .Message
+include("Messages.jl")
+using .Messages
 
 include("Frame.jl")
 using .Frame
