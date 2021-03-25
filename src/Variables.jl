@@ -1,4 +1,4 @@
-module Variable
+module Variables
 
     abstract type AbstractVariable end
 
