@@ -11,8 +11,8 @@ using .Variables
 include("Messages.jl")
 using .Messages
 
-include("Frame.jl")
-using .Frame
+include("Frames.jl")
+using .Frames
 
 include("Decode.jl")
 using .Decode
