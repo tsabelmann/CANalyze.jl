@@ -23,5 +23,3 @@ deploydocs(;
     devbranch="main",
     target="build"
 )
-
-# deploydocs(repo="github.com/tsabelmann/CANTools.jl.git")
