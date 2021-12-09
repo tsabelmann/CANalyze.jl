@@ -1,10 +1,9 @@
 module Utils
-    include("Endian.jl")
+    include("endian.jl")
     export is_little_endian, is_big_endian
 
-    include("Mask.jl")
+    include("mask.jl")
     export mask, zero_mask, full_mask
 
-    include("Convert.jl")
-
+    include("convert.jl")
 end
