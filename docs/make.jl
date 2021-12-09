@@ -18,10 +18,10 @@ makedocs(;
     ],
 )
 
-# deploydocs(;
-#     repo="github.com/tsabelmann/CANTools.jl",
-#     devbranch="main",
-#     target="build"
-# )
+deploydocs(;
+    repo="github.com/tsabelmann/CANTools.jl",
+    devbranch="main",
+    target="build"
+)
 
-deploydocs(repo="github.com/tsabelmann/CANTools.jl.git")
+# deploydocs(repo="github.com/tsabelmann/CANTools.jl.git")
