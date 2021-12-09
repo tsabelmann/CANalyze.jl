@@ -8,5 +8,5 @@ CurrentModule = CANTools
 ```
 
 ```@autodocs
-Modules = [CANTools]
+Modules = [CANTools, CANTools.Utils]
 ```

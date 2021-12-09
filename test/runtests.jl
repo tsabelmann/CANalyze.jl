@@ -1,6 +1,9 @@
 using CANTools
 using Test
 
-@testset "CANTools.jl" begin
-    # Write your tests here.
-end
+@info "Starting tests..."
+
+include("Endian.jl")
+include("Mask.jl")
+
+@info "Ending tests..."
