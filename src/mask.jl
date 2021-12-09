@@ -1,9 +1,14 @@
+"""
+
+"""
 function mask(::Type{T}, length::UInt8, shift::UInt8) where {T <: Unsigned}
     ret = mask(T, length)
     ret <<= shift
     return T(ret)
 end
 
+"""
+"""
 function mask(::Type{T}, length::S1, shift::S2) where
     {T <: Unsigned, S1 <: Integer, S2 <: Integer}
 
@@ -12,6 +17,8 @@ function mask(::Type{T}, length::S1, shift::S2) where
     return mask(T, l, s)
 end
 
+"""
+"""
 function mask(::Type{T}, length::UInt8) where {T <: Unsigned}
     ret = zero(T)
     if length > 0
@@ -24,6 +31,8 @@ function mask(::Type{T}, length::UInt8) where {T <: Unsigned}
     return T(ret)
 end
 
+"""
+"""
 function mask(::Type{T}, length::S) where {T <: Unsigned, S <: Integer}
     l = convert(UInt8, length)
     return mask(T, l)
@@ -33,6 +42,8 @@ function mask(::Type{T}) where {T <: Unsigned}
     return full_mask(T)
 end
 
+"""
+"""
 function full_mask(::Type{T}) where {T <: Unsigned}
     ret = zero(T)
     for i in 0:(8sizeof(T) - 2)
@@ -43,6 +54,9 @@ function full_mask(::Type{T}) where {T <: Unsigned}
     return ret
 end
 
+"""
+    zero
+"""
 function zero_mask(::Type{T}) where {T <: Unsigned}
     return zero(T)
 end
