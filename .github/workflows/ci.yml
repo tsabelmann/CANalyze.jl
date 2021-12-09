@@ -2,10 +2,10 @@ name: CI
 on:
   pull_request:
     branches:
-      - master
+      - main
   push:
     branches:
-      - master
+      - main
     tags: '*'
 jobs:
   test:
@@ -61,7 +61,7 @@ jobs:
       - run: |
           julia --project=docs -e '
             using Documenter: doctest
-            using NFFT'
+            using CANTools'
             #doctest(CANTools)' # change MYPACKAGE to the name of your package
       - run: julia --project=docs docs/make.jl
         env:
