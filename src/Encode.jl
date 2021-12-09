@@ -1,7 +1,6 @@
 module Encode
+    # include("Variable.jl")
+    # import .Variable
 
-    function encode()
-        print("Hello Decode")
-    end
 
 end

@@ -1,5 +1,17 @@
 abstract type AbstractVariable end
 
+abstract type TypedVariable{T} <: AbstractVariable end
+
+struct SignedVariable <: TypedVariable{Float32}
+    factor::Float32
+    offset::Float32
+
+end
+
+struct NamedVariable <: AbstractVariable
+    variable::TypedVariable
+end
+
 # abstract type NamedVariable <: AbstractVariable end
 #
 # abstract type UnnamedVariable <: AbstractVariable end
