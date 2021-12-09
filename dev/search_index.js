@@ -1,0 +1,3 @@
+var documenterSearchIndex = {"docs":
+[{"location":"","page":"Home","title":"Home","text":"CurrentModule = CANTools","category":"page"},{"location":"#CANTools","page":"Home","title":"CANTools","text":"","category":"section"},{"location":"","page":"Home","title":"Home","text":"","category":"page"},{"location":"","page":"Home","title":"Home","text":"Modules = [CANTools, CANTools.Utils]","category":"page"},{"location":"#CANTools.Utils.is_little_endian-Tuple{}","page":"Home","title":"CANTools.Utils.is_little_endian","text":"is_little_endian()    \n\nReturns if the system has little-endian byte-order.\n\nis_little_endian()\n\n# output\n\nfalse\n\n\n\n\n\n","category":"method"}]
+}
