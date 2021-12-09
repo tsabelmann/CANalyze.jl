@@ -1,5 +1,5 @@
 """
-is_little_endian()    
+    is_little_endian()::Bool
 
 Returns `true` if the system has little-endian byte-order.
 """
@@ -15,9 +15,9 @@ function is_little_endian()::Bool
 end
 
 """
-is_big_endian()    
+    is_big_endian()::Bool
 
-Returns `big` if the system has big-endian byte-order.
+Returns `true` if the system has big-endian byte-order.
 """
 function is_big_endian()::Bool
     return !is_little_endian()
