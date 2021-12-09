@@ -1,15 +1,7 @@
 """
-    is_little_endian()    
+is_little_endian()    
 
-    Returns if the system has little-endian byte-order.
-
-```jldoctest
-is_little_endian()
-
-# output
-
-false
-```
+Returns `true` if the system has little-endian byte-order.
 """
 function is_little_endian()::Bool
     x::UInt16 = 0x0001
@@ -22,6 +14,11 @@ function is_little_endian()::Bool
     end
 end
 
+"""
+is_big_endian()    
+
+Returns `big` if the system has big-endian byte-order.
+"""
 function is_big_endian()::Bool
     return !is_little_endian()
 end
