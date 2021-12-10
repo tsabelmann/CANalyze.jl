@@ -16,7 +16,8 @@ end
 """
     from_bytes(type::Type{T}, array::A) where {A <: AbstractArray{UInt8}, T <: Number} -> T
 
-Creates a value of type `T` constituted by the byte-array `array`
+Creates a value of type `T` constituted by the byte-array `array`. If the `array` length is
+smaller than the size of `T`, `array` is filled with enough zeros
 
 # Arguments
 - `type::Type{T}`: the type to which the byte-array is transformed
@@ -27,6 +28,12 @@ Creates a value of type `T` constituted by the byte-array `array`
 """
 function from_bytes(type::Type{T}, array::A)::T where
     {A <: AbstractArray{UInt8}, T <: Number}
+    if length(array) < sizeof(T)
+        for i=1:(sizeof(T) - length(array))
+            push!(array, UInt8(0))
+        end
+    end
+
     values = reinterpret(type, array)
     return values[1]
 end
