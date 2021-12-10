@@ -1,4 +1,4 @@
 @info "CANTools.Utils tests..."
-include("Endian.jl")
-include("Mask.jl")
+include("endian.jl")
 include("convert.jl")
+include("mask.jl")
