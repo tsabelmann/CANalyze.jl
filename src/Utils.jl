@@ -6,4 +6,5 @@ module Utils
     export mask, zero_mask, full_mask
 
     include("convert.jl")
+    export to_bytes, from_bytes
 end
