@@ -1,7 +1,10 @@
 """
-    is_little_endian()::Bool
+    is_little_endian() -> Bool
 
-Returns `true` if the system has little-endian byte-order.
+Returns whether the system has little-endian byte-order
+
+# Returns
+- `Bool`: The system has little-endian byte-order
 """
 function is_little_endian()::Bool
     x::UInt16 = 0x0001
@@ -15,9 +18,12 @@ function is_little_endian()::Bool
 end
 
 """
-    is_big_endian()::Bool
+    is_big_endian() -> Bool
 
-Returns `true` if the system has big-endian byte-order.
+Returns whether the system has big-endian byte-order
+
+# Returns
+- `Bool`: The system has big-endian byte-order
 """
 function is_big_endian()::Bool
     return !is_little_endian()
