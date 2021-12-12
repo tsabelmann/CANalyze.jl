@@ -1,23 +1,23 @@
 module CANTools
 
-include("Utils.jl")
-using .Utils
-export is_little_endian, is_big_endian
-export mask, zero_mask, full_mask
+    include("Utils.jl")
+    using .Utils
+    export is_little_endian, is_big_endian
+    export mask, zero_mask, full_mask
 
-include("Variables.jl")
-using .Variables
+    include("Frames.jl")
+    using .Frames
 
-include("Messages.jl")
-using .Messages
+    include("Signals.jl")
+    using .Signals
 
-include("Frames.jl")
-using .Frames
+    include("Messages.jl")
+    using .Messages
 
-include("Decode.jl")
-using .Decode
+    include("Decode.jl")
+    using .Decode
 
-include("Encode.jl")
-using .Encode
+    include("Encode.jl")
+    using .Encode
 
 end
