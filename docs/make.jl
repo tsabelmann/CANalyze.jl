@@ -16,8 +16,12 @@ makedocs(;
     pages=[
         "Home" => "index.md",
         "Documentation" => [
-            "Frames" => "frames.md"
-            "Utils" => "utils.md"
+            "Frames" => "frames.md",
+            "Utils" => "utils.md",
+            "Signals" => "signals.md",
+            "Messages" => "messages.md",
+            "Decode" => "decode.md",
+            "Encode" => "encode.md"
         ]
     ],
 )
