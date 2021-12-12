@@ -1,5 +1,4 @@
 module Signals
-    using ..Utils
 
     abstract type AbstractVariable end
 
