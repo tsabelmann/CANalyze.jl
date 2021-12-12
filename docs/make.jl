@@ -16,6 +16,7 @@ makedocs(;
     pages=[
         "Home" => "index.md",
         "Documentation" => [
+            "Frames" => "frames.jl"
             "Utils" => "utils.md"
         ]
     ],
