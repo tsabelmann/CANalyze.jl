@@ -12,7 +12,7 @@ of bits
 # Returns
 - `T`: the mask defined by `length` and `shift`
 """
-function mask(::Type{T}, length::UInt8, shift::UInt8)::T where {T <: Unsigned}
+function mask(::Type{T}, length::UInt8, shift::UInt8)::T where {T <: Integer}
     ret = mask(T, length)
     ret <<= shift
     return T(ret)
@@ -32,7 +32,7 @@ of bits
 # Returns
 - `T`: the mask defined by `length` and `shift`
 """
-function mask(::Type{T}, length::Integer, shift::Integer)::T where {T <: Unsigned}
+function mask(::Type{T}, length::Integer, shift::Integer)::T where {T <: Integer}
     l = convert(UInt8, length)
     s = convert(UInt8, shift)
     return mask(T, l, s)
@@ -50,7 +50,7 @@ Creates a mask of type `T` with `length` number of bits
 # Returns
 - `T`: the mask defined by `length`
 """
-function mask(::Type{T}, length::UInt8)::T where {T <: Unsigned}
+function mask(::Type{T}, length::UInt8)::T where {T <: Integer}
     ret = zero(T)
     if length > 0
         for i in 1:(length-1)
@@ -74,7 +74,7 @@ Creates a mask of type `T` with `length` number of bits
 # Returns
 - `T`: the mask defined by `length`
 """
-function mask(::Type{T}, length::Integer)::T where {T <: Unsigned}
+function mask(::Type{T}, length::Integer)::T where {T <: Integer}
     l = convert(UInt8, length)
     return mask(T, l)
 end
@@ -90,7 +90,7 @@ Creates a full mask of type `T`
 # Returns
 - `T`: the full mask
 """
-function mask(::Type{T})::T where {T <: Unsigned}
+function mask(::Type{T})::T where {T <: Integer}
     return full_mask(T)
 end
 
@@ -105,7 +105,7 @@ Creates a full mask of type `T`
 # Returns
 - `T`: the full mask
 """
-function full_mask(::Type{T})::T where {T <: Unsigned}
+function full_mask(::Type{T})::T where {T <: Integer}
     ret = zero(T)
     for i in 0:(8sizeof(T) - 2)
         ret += 1
@@ -126,6 +126,6 @@ Creates a zero mask of type `T`
 # Returns
 - `T`: the zero mask
 """
-function zero_mask(::Type{T})::T where {T <: Unsigned}
+function zero_mask(::Type{T})::T where {T <: Integer}
     return zero(T)
 end
