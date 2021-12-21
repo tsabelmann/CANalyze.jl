@@ -79,6 +79,12 @@ module Frames
 
     """
     """
+    function data(frame::AbstractCANFrame)::Array{UInt8,1}
+        return frame.data
+    end
+
+    """
+    """
     function dlc(frame::AbstractCANFrame)::UInt8
         return length(frame.data)
     end
@@ -112,7 +118,7 @@ module Frames
     function max_size(::Type{CANFdFrame})::UInt8
         return 64
     end
-    
+
     export AbstractCANFrame, CANFdFrame, CANFrame
-    export can_id, dlc, is_extended, is_standard, max_size
+    export can_id, data, dlc, is_extended, is_standard, max_size
 end
