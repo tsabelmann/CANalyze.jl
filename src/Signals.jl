@@ -38,7 +38,7 @@ module Signals
                     length::Integer,
                     factor::T,
                     offset::T;
-                    signed::Bool=False,
+                    signed::Bool=false,
                     byte_order::Symbol=:little_endian) where {T}
 
         if byte_order != :little_endian && byte_order != :big_endian
