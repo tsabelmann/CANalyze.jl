@@ -16,4 +16,7 @@ module CANTools
 
     include("Encode.jl")
     using .Encode
+
+    include("IO.jl")
+    using .IO
 end
