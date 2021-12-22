@@ -1,31 +1,50 @@
+"""
+"""
 module Signals
-
+    """
+    """
     abstract type AbstractSignal{T} end
 
+    """
+    """
     struct NamedSignal{T} <: AbstractSignal{T}
         name::Union{Nothing,String}
         unit::Union{Nothing,String}
     end
 
+    """
+    """
     abstract type UnnamedSignal{T} <: AbstractSignal{T} end
 
+    """
+    """
     abstract type AbstractIntegerSignal{T <: Integer} <: UnnamedSignal{T} end
 
+    """
+    """
     abstract type AbstractFloatSignal{T <: AbstractFloat} <: UnnamedSignal{T} end
 
+    """
+    """
     struct Bit <: AbstractIntegerSignal{Bool}
         start::UInt16
     end
 
+    """
+    """
     function Bit(start::Integer)
         start = convert(UInt16, start)
         return Bit(start)
     end
 
+    """
+    """
     function start(signal::Bit)::UInt16
         return signal.start
     end
 
+    """
+    """
     struct Unsigned{T} <: AbstractFloatSignal{T}
         start::UInt16
         length::UInt16
@@ -34,6 +53,8 @@ module Signals
         byte_order::Symbol
     end
 
+    """
+    """
     function Unsigned(start::Integer,
                     length::Integer,
                     factor::T,
