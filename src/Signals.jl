@@ -256,31 +256,58 @@ module Signals
         return signal.byte_order
     end
 
-    """
-    """
-    function Signal(start::Integer,
-                    length::Integer,
-                    factor::T,
-                    offset::T,
-                    signed::Bool,
-                    byte_order::Symbol)::Union{Unsigned{T},Signed{T}} where {T}
-        if signed
-            return Signed(start, length, factor, offset, byte_order)
-        else
-            return Unsigned(start, length, factor, offset, byte_order)
-        end
-    end
-
-    """
-    """
-    function Signal(; start::Integer,
-                    length::Integer,
-                    factor::T,
-                    offset::T,
-                    signed::Bool=false,
-                    byte_order::Symbol=:little_endian) where {T}
-        return Signal(start, length, factor, offset, signed, byte_order)
-    end
+    # """
+    # """
+    # function Signal(start::Integer,
+    #                 length::Integer,
+    #                 factor::T,
+    #                 offset::T,
+    #                 signed::Bool,
+    #                 byte_order::Symbol)::Union{Unsigned{T},Signed{T}} where {T}
+    #     if signed
+    #         return Signed(start, length, factor, offset, byte_order)
+    #     else
+    #         return Unsigned(start, length, factor, offset, byte_order)
+    #     end
+    # end
+    #
+    # """
+    # """
+    # function Signal(; start::Integer,
+    #                   length::Integer,
+    #                   factor::T,
+    #                   offset::T,
+    #                   signed::Bool=false,
+    #                   byte_order::Symbol=:little_endian) where {T}
+    #     return Signal(start, length, factor, offset, signed, byte_order)
+    # end
+    #
+    #
+    # """
+    # """
+    # function Signal{T}(start::Integer,
+    #                    length::Integer,
+    #                    factor::Union{Integer, AbstractFloat},
+    #                    offset::Union{Integer, AbstractFloat},
+    #                    signed::Bool,
+    #                    byte_order::Symbol) where {T}
+    #    factor = convert(T, factor)
+    #    offset = convert(T, offset)
+    #    return Signal(start, length, factor, offset, byte_order)
+    # end
+    #
+    # """
+    # """
+    # function Signed{T}(; start::Integer,
+    #                      length::Integer,
+    #                      factor::Union{Integer, AbstractFloat}=one(T),
+    #                      offset::Union{Integer, AbstractFloat}=zero(T),
+    #                      signed::Bool=false,
+    #                      byte_order::Symbol=:little_endian) where {T}
+    #    factor = convert(T, factor)
+    #    offset = convert(T, offset)
+    #    return Signal(start, length, factor, offset, byte_order)
+    # end
 
     """
     """
@@ -340,24 +367,37 @@ module Signals
         start::UInt16
         length::UInt16
         byte_order::Symbol
+
+        """
+        """
+        function Raw(start::UInt16, length::UInt16,byte_order::Symbol)
+            if length == 0
+                throw(DomainError(length, "The length has to be greater or equal to 1"))
+            end
+
+            if byte_order != :little_endian && byte_order != :big_endian
+                throw(DomainError(byte_order, "Byte order not supported"))
+            end
+
+            return new(start, length, byte_order)
+        end
     end
 
     """
     """
-    function Raw(start::Integer,
-                 length::Integer;
-                 byte_order::Symbol=:little_endian) where {T}
-        start  = convert(UInt16, start)
+    function Raw(start::Integer, length::Integer, byte_order::Symbol)
+        start = convert(UInt16, start)
         length = convert(UInt16, length)
         return Raw(start, length, byte_order)
     end
+
 
     """
     """
     function Raw(; start::Integer,
                    length::Integer,
                    byte_order::Symbol=:little_endian) where {T}
-        return Raw(start, length; byte_order=byte_order)
+        return Raw(start, length, byte_order)
     end
 
 
