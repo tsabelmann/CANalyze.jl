@@ -40,16 +40,14 @@ module Decode
 
     """
     """
-    function decode(signal::Signals.Signal{T}, data::Frames.CANFrame) where {T}
+    function decode(signal::Signals.Unsigned{T}, data::Frames.CANFrame) where {T}
+        start = Signals.start(signal)
+        length = Signals.length(signal)
+        factor = Signals.factor(signal)
+        offset = Signals.offset(signal)
         byte_order = Signals.byte_order(signal)
-        signed = Signals.signed(signal)
 
         if byte_order == :little_endian
-            start = Signals.start(signal)
-            length = Signals.length(signal)
-            factor = Signals.factor(signal)
-            offset = Signals.offset(signal)
-
             if start >= 8*Frames.dlc(data)
                 throw(DomainError())
             end
@@ -58,30 +56,70 @@ module Decode
                 throw(DomainError())
             end
 
-            if signed
-                value = Utils.from_bytes(Int64, Frames.data(data))
-            else
-                value = Utils.from_bytes(UInt64, Frames.data(data))
-            end
-
+            value = Utils.from_bytes(UInt64, Frames.data(data))
             value = value >> start
-
-            if signed
-                value = value & Utils.mask(Int64, length)
-                # sign extend value if most-significant bit is 1
-                if (value >> (length - 1)) & 0x01 != 0
-                    value = value + ~Utils.mask(Int64, length)
-                end
-            else
-                value = value & Utils.mask(UInt64, length)
+        elseif byte_order == :big_endian
+            start_bit_in_byte = start % 8
+            start_byte = div(start, 8)
+            start = 8*start_byte + (7 - start_bit_in_byte)
+            new_shift = 8Frames.dlc(data) - start - length
+            if new_shift < 0
+                throw(DomainError(new_shift, "The bits cannot be selected"))
             end
 
-            result = factor * value + offset
-            return result
-        elseif byte_order == :big_endian
-
+            value = Utils.from_bytes(UInt64, reverse(Frames.data(data)))
+            value = value >> new_shift
         else
             throw(DomainError(byte_order, "Byte order not supported"))
         end
+
+        value = value & Utils.mask(UInt64, length)
+        result = factor * value + offset
+        return result
     end
+
+    function decode(signal::Signals.Signed{T}, data::Frames.CANFrame) where {T}
+        start = Signals.start(signal)
+        length = Signals.length(signal)
+        factor = Signals.factor(signal)
+        offset = Signals.offset(signal)
+        byte_order = Signals.byte_order(signal)
+
+        if byte_order == :little_endian
+            if start >= 8*Frames.dlc(data)
+                throw(DomainError())
+            end
+
+            if start + length - 1 >= 8 * Frames.dlc(data)
+                throw(DomainError())
+            end
+
+            value = Utils.from_bytes(Int64, Frames.data(data))
+            value = value >> start
+        elseif byte_order == :big_endian
+            start_bit_in_byte = start % 8
+            start_byte = div(start, 8)
+            start = 8*start_byte + (7 - start_bit_in_byte)
+            new_shift = 8Frames.dlc(data) - start - length
+            if new_shift < 0
+                throw(DomainError(new_shift, "The bits cannot be selected"))
+            end
+
+            value = Utils.from_bytes(Int64, reverse(Frames.data(data)))
+            value = value >> new_shift
+        else
+            throw(DomainError(byte_order, "Byte order not supported"))
+        end
+
+        value = value & Utils.mask(Int64, length)
+        # sign extend value if most-significant bit is 1
+        if (value >> (length - 1)) & 0x01 != 0
+            value = value + ~Utils.mask(Int64, length)
+        end
+
+        result = factor * value + offset
+        return result
+    end
+
+
 end
