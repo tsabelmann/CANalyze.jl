@@ -158,38 +158,39 @@ module Signals
         factor::T
         offset::T
         byte_order::Symbol
+
+        function Signed(start::UInt16,
+                        length::UInt16,
+                        factor::T,
+                        offset::T,
+                        byte_order::Symbol) where {T <: AbstractFloat}
+            if byte_order != :little_endian && byte_order != :big_endian
+                throw(DomainError(byte_order, "Byte order not supported"))
+            end
+
+            if length == 0
+                throw(DomainError(length, "The length has to be greater or equal to 1"))
+            end
+
+            return new{T}(start, length, factor, offset, byte_order)
+        end
     end
 
+    """
+    """
     function Signed(start::Integer,
                     length::Integer,
-                    factor::T,
-                    offset::T,
-                    byte_order::Symbol) where {T}
-
-        if byte_order != :little_endian && byte_order != :big_endian
-            byte_order = :little_endian
+                    factor::Union{Integer, AbstractFloat},
+                    offset::Union{Integer, AbstractFloat},
+                    byte_order::Symbol)
+        start = convert(UInt16, start)
+        length = convert(UInt16, length)
+        if factor isa Integer && offset isa Integer
+            factor = convert(Float64, factor)
+            offset = convert(Float64, offset)
+        else
+            factor, offset = promote(factor, offset)
         end
-
-        if length == 0
-            throw(DomainError(length, "The length has to be greater or equal to 1"))
-        end
-
-        return Signed{T}(
-                convert(UInt16, start),
-                convert(UInt16, length),
-                factor,
-                offset,
-                byte_order
-        )
-    end
-
-    """
-    """
-    function Signed{T}(start::Integer,
-                       length::Integer;
-                       factor::T=one(T),
-                       offset::T=zero(T),
-                       byte_order::Symbol=:little_endian) where {T}
         return Signed(start, length, factor, offset, byte_order)
     end
 
@@ -197,9 +198,19 @@ module Signals
     """
     function Signed(; start::Integer,
                       length::Integer,
-                      factor::T,
-                      offset::T,
-                      byte_order::Symbol=:little_endian) where {T}
+                      factor::Union{Integer, AbstractFloat},
+                      offset::Union{Integer, AbstractFloat},
+                      byte_order::Symbol=:little_endian)
+        return Signed(start, length, factor, offset, byte_order)
+    end
+
+    """
+    """
+    function Signed{T}(start::Integer,
+                       length::Integer;
+                       factor::Union{Integer, AbstractFloat}=one(T),
+                       offset::Union{Integer, AbstractFloat}=zero(T),
+                       byte_order::Symbol=:little_endian) where {T}
         return Signed(start, length, factor, offset, byte_order)
     end
 
@@ -207,11 +218,14 @@ module Signals
     """
     function Signed{T}(; start::Integer,
                          length::Integer,
-                         factor::T=one(T),
-                         offset::T=zero(T),
+                         factor::Union{Integer, AbstractFloat}=one(T),
+                         offset::Union{Integer, AbstractFloat}=zero(T),
                          byte_order::Symbol=:little_endian) where {T}
+        factor = convert(T, factor)
+        offset = convert(T, offset)
         return Signed(start, length, factor, offset, byte_order)
     end
+
     """
     """
     function start(signal::Signed{T})::UInt16 where {T}
