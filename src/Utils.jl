@@ -19,8 +19,8 @@ module Utils
     """
         from_bytes(type::Type{T}, array::A) where {A <: AbstractArray{UInt8}, T <: Number} -> T
 
-    Creates a value of type `T` constituted by the byte-array `array`. If the `array` length is
-    smaller than the size of `T`, `array` is filled with enough zeros
+    Creates a value of type `T` constituted by the byte-array `array`. If the `array` length
+    is smaller than the size of `T`, `array` is filled with enough zeros
 
     # Arguments
     - `type::Type{T}`: the type to which the byte-array is transformed
@@ -73,10 +73,10 @@ module Utils
     end
 
     """
-        mask(::Type{T}, length::UInt8, shift::UInt8) where {T <: Unsigned} -> T
+        mask(::Type{T}, length::UInt8, shift::UInt8) where {T <: Integer} -> T
 
-    Creates a mask of type `T` with `length` number of bits and right-shifted by `shift` number
-    of bits
+    Creates a mask of type `T` with `length` number of bits and right-shifted by `shift`
+    number of bits
 
     # Arguments
     - `Type{T}`: the type of the mask
@@ -93,10 +93,10 @@ module Utils
     end
 
     """
-        mask(::Type{T}, length::Integer, shift::Integer) where {T <: Unsigned} -> T
+        mask(::Type{T}, length::Integer, shift::Integer) where {T <: Integer} -> T
 
-    Creates a mask of type `T` with `length` number of bits and right-shifted by `shift` number
-    of bits
+    Creates a mask of type `T` with `length` number of bits and right-shifted by `shift`
+    number of bits
 
     # Arguments
     - `Type{T}`: the type of the mask
@@ -113,7 +113,7 @@ module Utils
     end
 
     """
-        mask(::Type{T}, length::UInt8) where {T <: Unsigned} -> T
+        mask(::Type{T}, length::UInt8) where {T <: Integer} -> T
 
     Creates a mask of type `T` with `length` number of bits
 
@@ -137,7 +137,7 @@ module Utils
     end
 
     """
-        mask(::Type{T}, length::Integer) where {T <: Unsigned} -> T
+        mask(::Type{T}, length::Integer) where {T <: Integer} -> T
 
     Creates a mask of type `T` with `length` number of bits
 
@@ -154,7 +154,7 @@ module Utils
     end
 
     """
-        mask(::Type{T}) where {T <: Unsigned} -> T
+        mask(::Type{T}) where {T <: Integer} -> T
 
     Creates a full mask of type `T`
 
@@ -169,7 +169,7 @@ module Utils
     end
 
     """
-        full_mask(::Type{T}) where {T <: Unsigned} -> T
+        full_mask(::Type{T}) where {T <: Integer} -> T
 
     Creates a full mask of type `T`
 
@@ -190,7 +190,7 @@ module Utils
     end
 
     """
-        zero_mask(::Type{T}) where {T <: Unsigned} -> T
+        zero_mask(::Type{T}) where {T <: Integer} -> T
 
     Creates a zero mask of type `T`
 
