@@ -51,15 +51,22 @@ module Signals
         factor::T
         offset::T
         byte_order::Symbol
+
+        function Unsigned{T}(start::UInt16, length::UInt16;
+                             factor::T=one(T),
+                             offset::T=zero(T),
+                             byte_order::Symbol=:little_endian) where {T}
+            return new(start, length, factor, offset, byte_order)
+        end
     end
 
     """
     """
     function Unsigned(start::Integer,
-                    length::Integer,
+                    length::Integer;
                     factor::T,
-                    offset::T;
-                    byte_order::Symbol=:little_endian) where {T}
+                    offset::T,
+                    byte_order::Symbol) where {T}
 
         if byte_order != :little_endian && byte_order != :big_endian
             byte_order = :little_endian
