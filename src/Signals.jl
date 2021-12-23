@@ -107,6 +107,8 @@ module Signals
                     factor::Union{Integer, AbstractFloat}=one(T),
                     offset::Union{Integer, AbstractFloat}=zero(T),
                     byte_order::Symbol=:little_endian) where {T}
+        factor = convert(T, factor)
+        offset = convert(T, offset)
         return Unsigned(start, length, factor, offset, byte_order)
     end
 
@@ -211,6 +213,8 @@ module Signals
                        factor::Union{Integer, AbstractFloat}=one(T),
                        offset::Union{Integer, AbstractFloat}=zero(T),
                        byte_order::Symbol=:little_endian) where {T}
+        factor = convert(T, factor)
+        offset = convert(T, offset)
         return Signed(start, length, factor, offset, byte_order)
     end
 
@@ -256,108 +260,94 @@ module Signals
         return signal.byte_order
     end
 
-    # """
-    # """
-    # function Signal(start::Integer,
-    #                 length::Integer,
-    #                 factor::T,
-    #                 offset::T,
-    #                 signed::Bool,
-    #                 byte_order::Symbol)::Union{Unsigned{T},Signed{T}} where {T}
-    #     if signed
-    #         return Signed(start, length, factor, offset, byte_order)
-    #     else
-    #         return Unsigned(start, length, factor, offset, byte_order)
-    #     end
-    # end
-    #
-    # """
-    # """
-    # function Signal(; start::Integer,
-    #                   length::Integer,
-    #                   factor::T,
-    #                   offset::T,
-    #                   signed::Bool=false,
-    #                   byte_order::Symbol=:little_endian) where {T}
-    #     return Signal(start, length, factor, offset, signed, byte_order)
-    # end
-    #
-    #
-    # """
-    # """
-    # function Signal{T}(start::Integer,
-    #                    length::Integer,
-    #                    factor::Union{Integer, AbstractFloat},
-    #                    offset::Union{Integer, AbstractFloat},
-    #                    signed::Bool,
-    #                    byte_order::Symbol) where {T}
-    #    factor = convert(T, factor)
-    #    offset = convert(T, offset)
-    #    return Signal(start, length, factor, offset, byte_order)
-    # end
-    #
-    # """
-    # """
-    # function Signed{T}(; start::Integer,
-    #                      length::Integer,
-    #                      factor::Union{Integer, AbstractFloat}=one(T),
-    #                      offset::Union{Integer, AbstractFloat}=zero(T),
-    #                      signed::Bool=false,
-    #                      byte_order::Symbol=:little_endian) where {T}
-    #    factor = convert(T, factor)
-    #    offset = convert(T, offset)
-    #    return Signal(start, length, factor, offset, byte_order)
-    # end
-
     """
     """
-    struct Float{T} <: AbstractFloatSignal{T}
+    struct FloatSignal{T} <: AbstractFloatSignal{T}
         start::UInt16
         factor::T
         offset::T
         byte_order::Symbol
+
+        function FloatSignal(start::UInt16, factor::T, offset::T,
+                             byte_order::Symbol) where {T <: AbstractFloat}
+            new{T}(start, factor, offset, byte_order)
+        end
     end
 
     """
     """
-    function Float(start::Integer,
-                         factor::T,
-                         offset::T;
-                         byte_order::Symbol=:little_endian) where {T}
+    function FloatSignal(start::Integer,
+                         factor::Union{Integer,AbstractFloat},
+                         offset::Union{Integer,AbstractFloat},
+                         byte_order::Symbol)
         start = convert(UInt16, start)
-        return Float{T}(start, factor, offset, byte_order)
+        if factor isa Integer && offset isa Integer
+            factor = convert(Float64, factor)
+            offset = convert(Float64, offset)
+        else
+            factor, offset = promote(factor, offset)
+        end
+        return FloatSignal(start, factor, offset, byte_order)
     end
 
     """
     """
-    function Float(; start::Integer,
-                     factor::T,
-                     offset::T,
-                     byte_order::Symbol=:little_endian) where {T}
-        return Float(start, factor, offset; byte_order=byte_order)
+    function FloatSignal(; start::Integer,
+                           factor::Union{Integer,AbstractFloat},
+                           offset::Union{Integer,AbstractFloat},
+                           byte_order::Symbol)
+        return FloatSignal(start, factor, offset, byte_order)
     end
 
     """
     """
-    function start(signal::Float{T})::UInt16 where {T}
+    function FloatSignal{T}(start::Integer;
+                            factor::Union{Integer,AbstractFloat}=one(T),
+                            offset::Union{Integer,AbstractFloat}=zero(T),
+                            byte_order::Symbol=:little_endian) where {T}
+        factor = convert(T, factor)
+        offset = convert(T, offset)
+        return FloatSignal(start, factor, offset, byte_order)
+    end
+
+    function FloatSignal{T}(; start::Integer,
+                              factor::Union{Integer,AbstractFloat}=one(T),
+                              offset::Union{Integer,AbstractFloat}=zero(T),
+                              byte_order::Symbol=:little_endian) where {T}
+        factor = convert(T, factor)
+        offset = convert(T, offset)
+        return FloatSignal(start, factor, offset, byte_order)
+    end
+
+    const Float16Signal = FloatSignal{Float16}
+    const Float32Signal = FloatSignal{Float32}
+    const Float64Signal = FloatSignal{Float64}
+
+    """
+    """
+    function start(signal::FloatSignal{T})::UInt16 where {T}
         return signal.start
     end
 
+    function length(signal::FloatSignal{T})::UInt16 where {T}
+        return 8sizeof(T)
+    end
+
     """
     """
-    function factor(signal::Float{T})::T where {T}
+    function factor(signal::FloatSignal{T})::T where {T}
         return signal.factor
     end
 
     """
     """
-    function offset(signal::Float{T})::T where {T}
+    function offset(signal::FloatSignal{T})::T where {T}
         return signal.offset
     end
 
     """
     """
-    function byte_order(signal::Float{T})::Symbol where {T}
+    function byte_order(signal::FloatSignal{T})::Symbol where {T}
         return signal.byte_order
     end
 
