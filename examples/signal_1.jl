@@ -30,5 +30,21 @@ println(sig8)
 println(sig9)
 println(sig10)
 
-value = Decode.decode(sig9,frame)
+
+signal = Signals.Float32Signal(start=7, factor=1.0f0, offset=0.0f0, byte_order=:big_endian)
+value  = Decode.decode(signal,frame)
+hex = reinterpret(UInt8, [value])
 println(value)
+println(hex)
+
+signal = Signals.Float32Signal(start=0, byte_order=:little_endian)
+value  = Decode.decode(signal,frame)
+hex = reinterpret(UInt8, [value])
+println(value)
+println(hex)
+
+signal = Signals.NamedSignal("ABC", "Ah", Signals.Float32Signal, start=0, byte_order=:little_endian)
+value  = Decode.decode(signal,frame)
+hex = reinterpret(UInt8, [value])
+println(value)
+println(hex)
