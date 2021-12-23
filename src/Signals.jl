@@ -7,13 +7,6 @@ module Signals
 
     """
     """
-    struct NamedSignal{T} <: AbstractSignal{T}
-        name::Union{Nothing,String}
-        unit::Union{Nothing,String}
-    end
-
-    """
-    """
     abstract type UnnamedSignal{T} <: AbstractSignal{T} end
 
     """
@@ -407,5 +400,21 @@ module Signals
     """
     function byte_order(signal::Raw)::Symbol
         return signal.byte_order
+    end
+
+    """
+    """
+    struct NamedSignal{T} <: AbstractSignal{T}
+        name::Union{Nothing,String}
+        unit::Union{Nothing,String}
+        signal::UnnamedSignal{T}
+    end
+
+    """
+    """
+    function NamedSignal(name::Union{Nothing,String},
+                         unit::Union{Nothing,String},
+                         ::Type{T}; kwargs...) where {T <: UnnamedSignal}
+        return NamedSignal(name, unit, T(;kwargs...))
     end
 end
