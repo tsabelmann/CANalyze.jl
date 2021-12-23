@@ -8,6 +8,12 @@ module Decode
 
     """
     """
+    function decode(signal::Signals.NamedSignal{T}, can_frame::Frames.CANFrame)::T where {T}
+        return decode(signal.signal, can_frame)
+    end
+
+    """
+    """
     function decode(signal::Signals.UnnamedSignal{T},
                     can_frame::Frames.CANFrame,
                     default::R)::Union{T,R} where {T,R}
