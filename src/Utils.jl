@@ -1,36 +1,53 @@
-"""
-"""
 module Utils
     """
         to_bytes(num::Number) -> Vector{UInt8}
 
-    Creates the byte array consistituting the number `num`
+    Creates the byte representation of the number `num`.
 
     # Arguments
     - `num::Number`: the type of the mask
 
     # Returns
-    - `Vector{UInt8}`: the bytes constituting the number `num`
+    - `Vector{UInt8}`: the bytes representation of the number `num`
+
+    # Examples
+    ```jldoctest
+    using CANTools.Utils
+    bytes = Utils.to_bytes(UInt16(0xAAFF))
+
+    # output
+    2-element Vector{UInt8}:
+     0xff
+     0xaa
+    ```
     """
     function to_bytes(num::Number)::Vector{UInt8}
         return reinterpret(UInt8, [num])
     end
 
     """
-        from_bytes(type::Type{T}, array::A) where {A <: AbstractArray{UInt8}, T <: Number} -> T
+        from_bytes(type::Type{T}, array::AbstractArray{UInt8}) where {T <: Number} -> T
 
     Creates a value of type `T` constituted by the byte-array `array`. If the `array` length
-    is smaller than the size of `T`, `array` is filled with enough zeros
+    is smaller than the size of `T`, `array` is filled with enough zeros.
 
     # Arguments
     - `type::Type{T}`: the type to which the byte-array is transformed
-    - `array::A`: the byte array
+    - `array::AbstractArray{UInt8}`: the byte array
 
     # Returns
-    - `T`:
+    - `T`: the value constructed from the byte sequence
+
+    # Examples
+    ```jldoctest
+    using CANTools.Utils
+    bytes = Utils.from_bytes(UInt16, UInt8[0xFF, 0xAA])
+
+    # output
+    0xaaff
+    ```
     """
-    function from_bytes(type::Type{T}, array::A)::T where
-        {A <: AbstractArray{UInt8}, T <: Number}
+    function from_bytes(type::Type{T}, array::AbstractArray{UInt8})::T where {T <: Number}
         if length(array) < sizeof(T)
             for i=1:(sizeof(T) - length(array))
                 push!(array, UInt8(0))
@@ -76,7 +93,7 @@ module Utils
         mask(::Type{T}, length::UInt8, shift::UInt8) where {T <: Integer} -> T
 
     Creates a mask of type `T` with `length` number of bits and right-shifted by `shift`
-    number of bits
+    number of bits.
 
     # Arguments
     - `Type{T}`: the type of the mask
@@ -87,16 +104,16 @@ module Utils
     - `T`: the mask defined by `length` and `shift`
     """
     function mask(::Type{T}, length::UInt8, shift::UInt8)::T where {T <: Integer}
-        ret = mask(T, length)
+        ret::T = mask(T, length)
         ret <<= shift
-        return T(ret)
+        return ret
     end
 
     """
         mask(::Type{T}, length::Integer, shift::Integer) where {T <: Integer} -> T
 
     Creates a mask of type `T` with `length` number of bits and right-shifted by `shift`
-    number of bits
+    number of bits.
 
     # Arguments
     - `Type{T}`: the type of the mask
@@ -105,6 +122,15 @@ module Utils
 
     # Returns
     - `T`: the mask defined by `length` and `shift`
+
+    # Examples
+    ```jldoctest
+    using CANTools.Utils
+    m = Utils.mask(UInt64, 32, 16)
+
+    # output
+    0x0000ffffffff0000
+    ```
     """
     function mask(::Type{T}, length::Integer, shift::Integer)::T where {T <: Integer}
         l = convert(UInt8, length)
@@ -115,7 +141,7 @@ module Utils
     """
         mask(::Type{T}, length::UInt8) where {T <: Integer} -> T
 
-    Creates a mask of type `T` with `length` number of bits
+    Creates a mask of type `T` with `length` number of bits.
 
     # Arguments
     - `Type{T}`: the type of the mask
@@ -125,7 +151,7 @@ module Utils
     - `T`: the mask defined by `length`
     """
     function mask(::Type{T}, length::UInt8)::T where {T <: Integer}
-        ret = zero(T)
+        ret::T = zero(T)
         if length > 0
             for i in 1:(length-1)
                 ret += 1
@@ -133,13 +159,13 @@ module Utils
             end
             ret += 1
         end
-        return T(ret)
+        return ret
     end
 
     """
         mask(::Type{T}, length::Integer) where {T <: Integer} -> T
 
-    Creates a mask of type `T` with `length` number of bits
+    Creates a mask of type `T` with `length` number of bits.
 
     # Arguments
     - `Type{T}`: the type of the mask
@@ -147,6 +173,15 @@ module Utils
 
     # Returns
     - `T`: the mask defined by `length`
+
+    # Examples
+    ```jldoctest
+    using CANTools.Utils
+    m = Utils.mask(UInt64, 32)
+
+    # output
+    0x00000000ffffffff
+    ```
     """
     function mask(::Type{T}, length::Integer)::T where {T <: Integer}
         l = convert(UInt8, length)
@@ -156,13 +191,22 @@ module Utils
     """
         mask(::Type{T}) where {T <: Integer} -> T
 
-    Creates a full mask of type `T`
+    Creates a full mask of type `T` with `8sizeof(T)` bits.
 
     # Arguments
     - `Type{T}`: the type of the mask
 
     # Returns
     - `T`: the full mask
+
+    # Examples
+    ```jldoctest
+    using CANTools.Utils
+    m = Utils.mask(UInt64)
+
+    # output
+    0xffffffffffffffff
+    ```
     """
     function mask(::Type{T})::T where {T <: Integer}
         return full_mask(T)
@@ -171,16 +215,25 @@ module Utils
     """
         full_mask(::Type{T}) where {T <: Integer} -> T
 
-    Creates a full mask of type `T`
+    Creates a full mask of type `T` with `8sizeof(T)` bits.
 
     # Arguments
     - `Type{T}`: the type of the mask
 
     # Returns
     - `T`: the full mask
+
+    # Examples
+    ```jldoctest
+    using CANTools.Utils
+    m = Utils.full_mask(Int8)
+
+    # output
+    -1
+    ```
     """
     function full_mask(::Type{T})::T where {T <: Integer}
-        ret = zero(T)
+        ret::T = zero(T)
         for i in 0:(8sizeof(T) - 2)
             ret += 1
             ret <<= 1
@@ -192,13 +245,22 @@ module Utils
     """
         zero_mask(::Type{T}) where {T <: Integer} -> T
 
-    Creates a zero mask of type `T`
+    Creates a zero mask of type `T` where every bit is unset.
 
     # Arguments
     - `Type{T}`: the type of the mask
 
     # Returns
     - `T`: the zero mask
+
+    # Examples
+    ```jldoctest
+    using CANTools.Utils
+    m = Utils.zero_mask(UInt8)
+
+    # output
+    0x00
+    ```
     """
     function zero_mask(::Type{T})::T where {T <: Integer}
         return zero(T)
