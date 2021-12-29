@@ -1,6 +1,6 @@
-"""
-"""
 module Signals
+    import Base
+
     """
     """
     abstract type AbstractSignal{T} end
@@ -19,6 +19,12 @@ module Signals
 
     """
     """
+    function Base.:(==)(lhs::AbstractSignal{R}, rhs::AbstractSignal{S}) where {R,S}
+        return false
+    end
+
+    """
+    """
     struct Bit <: AbstractIntegerSignal{Bool}
         start::UInt16
     end
@@ -34,6 +40,12 @@ module Signals
     """
     function start(signal::Bit)::UInt16
         return signal.start
+    end
+
+    """
+    """
+    function Base.:(==)(lhs::Bit, rhs::Bit)
+        return start(lhs) == start(rhs)
     end
 
     """
@@ -145,6 +157,32 @@ module Signals
     """
     function byte_order(signal::Unsigned{T})::Symbol where {T}
         return signal.byte_order
+    end
+
+    """
+    """
+    function Base.:(==)(lhs::F, rhs::F) where {T, F <: AbstractFloatSignal{T}}
+        if start(lhs) != start(rhs)
+            return false
+        end
+
+        if length(lhs) != length(rhs)
+            return false
+        end
+
+        if factor(lhs) != factor(rhs)
+            return false
+        end
+
+        if offset(lhs) != offset(rhs)
+            return false
+        end
+
+        if byte_order(lhs) != byte_order(rhs)
+            return false
+        end
+
+        return true
     end
 
     struct Signed{T} <: AbstractFloatSignal{T}
@@ -405,16 +443,124 @@ module Signals
     """
     """
     struct NamedSignal{T} <: AbstractSignal{T}
-        name::Union{Nothing,String}
+        name::String
         unit::Union{Nothing,String}
+        default::Union{Nothing,T}
         signal::UnnamedSignal{T}
+
+        function NamedSignal{T}(name::String,
+                                unit::Union{Nothing,String},
+                                default::Union{Nothing,T},
+                                signal::UnnamedSignal{T}) where {T}
+            if name == ""
+                throw(DomainError(name, "name (\"$name\") cannot be the empty string"))
+            end
+
+            return new{T}(name, unit, default, signal)
+        end
     end
 
     """
     """
-    function NamedSignal(name::Union{Nothing,String},
-                         unit::Union{Nothing,String},
-                         ::Type{T}; kwargs...) where {T <: UnnamedSignal}
-        return NamedSignal(name, unit, T(;kwargs...))
+    function name(signal::NamedSignal{T})::String where {T}
+        return signal.name
+    end
+
+    """
+    """
+    function unit(signal::NamedSignal{T})::Union{Nothing,String} where {T}
+        return signal.unit
+    end
+
+    """
+    """
+    function default(signal::NamedSignal{T})::Union{Nothing,T} where {T}
+        return signal.default
+    end
+
+    """
+    """
+    function signal(signal::NamedSignal{T})::UnnamedSignal{T} where {T}
+        return signal.signal
+    end
+
+    const Signal = NamedSignal
+
+    """
+    """
+    struct Bits
+        bits::Set{UInt16}
+    end
+
+    """
+    """
+    function Bits(bits::Integer...)
+        Bits(Set(UInt16[bits...]))
+    end
+
+    """
+    """
+    function Bits(signal::AbstractFloatSignal{T}) where {T}
+        bits = Set{UInt16}()
+        start_bit = start(signal)
+        if byte_order(signal) == :little_endian
+            for i=0:length(signal)-1
+                bit_pos = start_bit + i
+                push!(bits, bit_pos)
+            end
+        elseif byte_order(signal) == :big_endian
+            for j=0:length(signal)-1
+                push!(bits, start_bit)
+                if start_bit % 8 == 0
+                    start_byte = div(start_bit,8)
+                    start_bit = 8 * (start_byte + 1) + 7
+                else
+                    start_bit -= 1
+                end
+            end
+        end
+        return Bits(bits)
+    end
+
+    """
+    """
+    function Bits(signal::AbstractIntegerSignal{T}) where {T}
+        bits = Set{UInt16}()
+        start_bit = start(signal)
+        if byte_order(signal) == :little_endian
+            for i=0:length(signal)-1
+                bit_pos = start_bit + i
+                push!(bits, bit_pos)
+            end
+        elseif byte_order(signal) == :big_endian
+            for j=0:length(signal)-1
+                push!(bits, start_bit)
+                if start_bit % 8 == 0
+                    start_byte = div(start_bit,8)
+                    start_bit = 8 * (start_byte + 1) + 7
+                else
+                    start_bit -= 1
+                end
+            end
+        end
+        return Bits(bits)
+    end
+
+    function Bits(signal::NamedSignal{T}) where {T}
+        return Bits(signal(signal))
+    end
+
+    """
+    """
+    function share_bits(lhs::Bits, rhs::Bits)::Bool
+        return !isdisjoint(lhs.bits, rhs.bits)
+    end
+
+    """
+    """
+    function overlap(lhs::AbstractSignal{R}, rhs::AbstractSignal{S})::Bool where {R,S}
+        lhs_bits = Bits(lhs)
+        rhs_bits = Bits(rhs)
+        return share_bits(lhs_bits, rhs_bits)
     end
 end
