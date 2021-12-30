@@ -1,16 +1,16 @@
-using CANTools
+using CANalyze
 using Documenter
 
-DocMeta.setdocmeta!(CANTools, :DocTestSetup, :(using CANTools); recursive=true)
+DocMeta.setdocmeta!(CANalyze, :DocTestSetup, :(using CANalyze); recursive=true)
 
 makedocs(;
-    modules=[CANTools],
+    modules=[CANalyze],
     authors="Tim Lucas Sabelmann",
-    repo="https://github.com/tsabelmann/CANTools.jl/blob/{commit}{path}#{line}",
+    repo="https://github.com/tsabelmann/CANalyze.jl/blob/{commit}{path}#{line}",
     sitename="CANTools.jl",
     format=Documenter.HTML(;
         prettyurls=get(ENV, "CI", "false") == "true",
-        canonical="https://tsabelmann.github.io/CANTools.jl",
+        canonical="https://tsabelmann.github.io/CANalyze.jl",
         assets=String[],
     ),
     pages=[
@@ -27,7 +27,7 @@ makedocs(;
 )
 
 deploydocs(;
-    repo="github.com/tsabelmann/CANTools.jl",
+    repo="github.com/tsabelmann/CANalyze.jl",
     devbranch="main",
     target="build"
 )
