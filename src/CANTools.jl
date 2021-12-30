@@ -11,6 +11,9 @@ module CANTools
     include("Messages.jl")
     using .Messages
 
+    include("Databases.jl")
+    using .Databases
+
     include("Decode.jl")
     using .Decode
 
