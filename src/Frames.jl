@@ -111,6 +111,6 @@ module Frames
         return 64
     end
 
-    export AbstractCANFrame, CANFdFrame, CANFrame
+    export CANFdFrame, CANFrame
     export frame_id, data, dlc, is_extended, is_standard, max_size
 end
