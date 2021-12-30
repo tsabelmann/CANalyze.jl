@@ -1,9 +1,9 @@
 ```@meta
-CurrentModule = CANTools
+CurrentModule = CANalyze
 ```
 
-# CANTools.Frames
+# CANalyze.Frames
 
 ```@autodocs
-Modules = [CANTools.Frames]
+Modules = [CANalyze.Frames]
 ```

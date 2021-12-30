@@ -1,4 +1,4 @@
-using CANTools.Utils
+using CANalyze.Utils
 using Test
 
 @info "mask tests..."

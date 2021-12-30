@@ -1,9 +1,9 @@
 ```@meta
-CurrentModule = CANTools
+CurrentModule = CANalyze
 ```
 
-# CANTools.Messages
+# CANalyze.Messages
 
 ```@autodocs
-Modules = [CANTools.Messages]
+Modules = [CANalyze.Messages]
 ```

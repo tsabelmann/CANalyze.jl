@@ -1,7 +1,7 @@
-using CANTools.Decode
-using CANTools.Frames
-using CANTools.Signals
-using CANTools.Messages
+using CANalyze.Decode
+using CANalyze.Frames
+using CANalyze.Signals
+using CANalyze.Messages
 
 
 signal1 = Signals.NamedSignal("ABC", nothing, nothing, Signals.Float32Signal(start=0, byte_order=:little_endian))

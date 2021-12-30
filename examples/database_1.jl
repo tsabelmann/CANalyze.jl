@@ -1,6 +1,6 @@
-using CANTools.Signals
-using CANTools.Messages
-using CANTools.Databases
+using CANalyze.Signals
+using CANalyze.Messages
+using CANalyze.Databases
 
 signal1 = Signals.NamedSignal("ABC", nothing, nothing, Signals.Float32Signal(start=0, byte_order=:little_endian))
 signal2 = Signals.NamedSignal("ABCD", nothing, nothing, Signals.Unsigned(start=40, length=17, factor=2, offset=20, byte_order=:big_endian))

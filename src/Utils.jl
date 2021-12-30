@@ -12,7 +12,7 @@ module Utils
 
     # Examples
     ```jldoctest
-    using CANTools.Utils
+    using CANalyze.Utils
     bytes = Utils.to_bytes(UInt16(0xAAFF))
 
     # output
@@ -40,7 +40,7 @@ module Utils
 
     # Examples
     ```jldoctest
-    using CANTools.Utils
+    using CANalyze.Utils
     bytes = Utils.from_bytes(UInt16, UInt8[0xFF, 0xAA])
 
     # output
@@ -125,7 +125,7 @@ module Utils
 
     # Examples
     ```jldoctest
-    using CANTools.Utils
+    using CANalyze.Utils
     m = Utils.mask(UInt64, 32, 16)
 
     # output
@@ -176,7 +176,7 @@ module Utils
 
     # Examples
     ```jldoctest
-    using CANTools.Utils
+    using CANalyze.Utils
     m = Utils.mask(UInt64, 32)
 
     # output
@@ -201,7 +201,7 @@ module Utils
 
     # Examples
     ```jldoctest
-    using CANTools.Utils
+    using CANalyze.Utils
     m = Utils.mask(UInt64)
 
     # output
@@ -225,7 +225,7 @@ module Utils
 
     # Examples
     ```jldoctest
-    using CANTools.Utils
+    using CANalyze.Utils
     m = Utils.full_mask(Int8)
 
     # output
@@ -255,7 +255,7 @@ module Utils
 
     # Examples
     ```jldoctest
-    using CANTools.Utils
+    using CANalyze.Utils
     m = Utils.zero_mask(UInt8)
 
     # output

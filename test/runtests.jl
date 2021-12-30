@@ -1,4 +1,4 @@
-using CANTools
+using CANalyze
 using Test
 
 @info "Starting tests..."
