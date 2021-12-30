@@ -1,6 +1,6 @@
-using CANTools.Decode
-using CANTools.Frames
-using CANTools.Signals
+using CANalyze.Decode
+using CANalyze.Frames
+using CANalyze.Signals
 
 frame = Frames.CANFrame(20, [1, 2, 0xFD, 4, 5, 6, 7, 8])
 
