@@ -1,7 +1,7 @@
 name = "CANTools"
 uuid = "c60dd3e6-0606-41cb-8b3c-18d234524e82"
 authors = ["Tim Lucas Sabelmann"]
-version = "0.1.0"
+version = "1.0.0"
 
 [compat]
 julia = "1.5.3"
