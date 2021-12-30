@@ -1,5 +1,3 @@
-"""
-"""
 module Decode
     import ..Utils
     import ..Frames
