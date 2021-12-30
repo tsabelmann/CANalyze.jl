@@ -222,4 +222,6 @@ module Decode
 
         return d
     end
+
+    export decode
 end
