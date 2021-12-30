@@ -19,12 +19,6 @@ module Signals
 
     """
     """
-    function Base.:(==)(lhs::AbstractSignal{R}, rhs::AbstractSignal{S}) where {R,S}
-        return false
-    end
-
-    """
-    """
     struct Bit <: AbstractIntegerSignal{Bool}
         start::UInt16
     end
@@ -38,8 +32,26 @@ module Signals
 
     """
     """
+    function Bit(; start::Integer=0)
+        return Bit(start)
+    end
+
+    """
+    """
     function start(signal::Bit)::UInt16
         return signal.start
+    end
+
+    """
+    """
+    function Base.length(signal::Bit)::UInt16
+        return 1
+    end
+
+    """
+    """
+    function byte_order(signal::Bit)::Symbol
+        return :little_endian
     end
 
     """
@@ -137,7 +149,7 @@ module Signals
 
     """
     """
-    function length(signal::Unsigned{T})::UInt16 where {T}
+    function Base.length(signal::Unsigned{T})::UInt16 where {T}
         return signal.length
     end
 
@@ -269,7 +281,7 @@ module Signals
 
     """
     """
-    function length(signal::Signed{T})::UInt16 where {T}
+    function Base.length(signal::Signed{T})::UInt16 where {T}
         return signal.length
     end
 
@@ -360,7 +372,7 @@ module Signals
         return signal.start
     end
 
-    function length(signal::FloatSignal{T})::UInt16 where {T}
+    function Base.length(signal::FloatSignal{T})::UInt16 where {T}
         return 8sizeof(T)
     end
 
@@ -430,7 +442,7 @@ module Signals
 
     """
     """
-    function length(signal::Raw)::UInt16
+    function Base.length(signal::Raw)::UInt16
         return signal.length
     end
 
@@ -448,12 +460,12 @@ module Signals
         default::Union{Nothing,T}
         signal::UnnamedSignal{T}
 
-        function NamedSignal{T}(name::String,
-                                unit::Union{Nothing,String},
-                                default::Union{Nothing,T},
-                                signal::UnnamedSignal{T}) where {T}
+        function NamedSignal(name::String,
+                             unit::Union{Nothing,String},
+                             default::Union{Nothing,T},
+                             signal::UnnamedSignal{T}) where {T}
             if name == ""
-                throw(DomainError(name, "name (\"$name\") cannot be the empty string"))
+                throw(DomainError(name, "name cannot be the empty string"))
             end
 
             return new{T}(name, unit, default, signal)
@@ -546,8 +558,8 @@ module Signals
         return Bits(bits)
     end
 
-    function Bits(signal::NamedSignal{T}) where {T}
-        return Bits(signal(signal))
+    function Bits(sig::NamedSignal{T}) where {T}
+        return Bits(signal(sig))
     end
 
     """
@@ -562,5 +574,65 @@ module Signals
         lhs_bits = Bits(lhs)
         rhs_bits = Bits(rhs)
         return share_bits(lhs_bits, rhs_bits)
+    end
+
+    function check(signal::AbstractFloatSignal{T}, available_bytes::UInt8)::Bool where {T}
+        if byte_order(signal) == :little_endian
+            if start(signal) + length(signal) - 1 >= 8*available_bytes
+                return false
+            else
+                return true
+            end
+        elseif byte_order(signal) == :big_endian
+            start_bit_in_byte = start(signal) % 8
+            start_byte = div(start(signal), 8)
+
+            if start_bit_in_byte != 7 && start_bit_in_byte != 0
+                start_bit = 8*start_byte + (7 - start_bit_in_byte)
+            end
+
+            new_shift = 8*available_bytes - start_bit - length
+            if new_shift < 0
+                return false
+            end
+
+            return true
+        else
+            return false
+        end
+    end
+
+    """
+    """
+    function check(signal::AbstractIntegerSignal{T}, available_bytes::UInt8)::Bool where {T}
+        if byte_order(signal) == :little_endian
+            if start(signal) + length(signal) - 1 >= 8*available_bytes
+                return false
+            else
+                return true
+            end
+        elseif byte_order(signal) == :big_endian
+            start_bit_in_byte = start(signal) % 8
+            start_byte = div(start(signal), 8)
+
+            if start_bit_in_byte != 7 && start_bit_in_byte != 0
+                start_bit = 8*start_byte + (7 - start_bit_in_byte)
+            end
+
+            new_shift = 8*available_bytes - start_bit - length
+            if new_shift < 0
+                return false
+            end
+
+            return true
+        else
+            return false
+        end
+    end
+
+    """
+    """
+    function check(sig::NamedSignal{T}, available_bytes::UInt8)::Bool where {T}
+        return check(signal(sig), available_bytes)
     end
 end
