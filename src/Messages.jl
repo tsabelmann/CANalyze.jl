@@ -87,4 +87,6 @@ module Messages
     function Base.iterate(iter::Message, state)
         return iterate(iter.signals, state)
     end
+
+    export Message, frame_id, dlc, name
 end
