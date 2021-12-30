@@ -1,79 +1,71 @@
-"""
-"""
 module Frames
-    """
-    """
     abstract type AbstractCANFrame end
 
-    """
-    """
     mutable struct CANFrame <: AbstractCANFrame
-        can_id::UInt32
+        frame_id::UInt32
         data::Array{UInt8,1}
         is_extended::Bool
 
-        """
-        """
-        function CANFrame(can_id::UInt32, data::A; is_extended::Bool=false) where
-            {A <: AbstractArray{UInt8}}
+        function CANFrame(frame_id::UInt32, data::AbstractArray{UInt8};
+                          is_extended::Bool=false)
             if length(data) > 8
                 throw(DomainError(data, "CANFrame allows a maximum of 8 bytes"))
             end
-            return new(can_id, data, is_extended)
+            return new(frame_id, data, is_extended)
         end
     end
 
     """
     """
-    function CANFrame(can_id::Integer, data::A; is_extended::Bool=false) where
+    function CANFrame(frame_id::Integer, data::A; is_extended::Bool=false) where
         {A <: AbstractArray{<:Integer}}
-        return CANFrame(convert(UInt32, can_id), UInt8[data...])
+        return CANFrame(convert(UInt32, frame_id), UInt8[data...])
     end
 
     """
     """
-    function CANFrame(can_id::Integer, data::Integer...; is_extended::Bool=false)
-        return CANFrame(convert(UInt32, can_id), UInt8[data...]; is_extended)
+    function CANFrame(frame_id::Integer, data::Integer...; is_extended::Bool=false)
+        return CANFrame(convert(UInt32, frame_id), UInt8[data...]; is_extended)
     end
 
     """
     """
     mutable struct CANFdFrame <: AbstractCANFrame
-        can_id::UInt32
+        frame_id::UInt32
         data::Array{UInt8,1}
         is_extended::Bool
 
         """
         """
-        function CANFdFrame(can_id::UInt32, data::A; is_extended::Bool=false) where
+        function CANFdFrame(frame_id::UInt32, data::A; is_extended::Bool=false) where
             {A <: AbstractArray{UInt8}}
             if length(data) > 64
                 throw(DomainError(data, "CANFdFrame allows a maximum of 64 bytes"))
             end
-            return new(can_id, data, is_extended)
+            return new(frame_id, data, is_extended)
         end
     end
 
     """
     """
-    function CANFdFrame(can_id::Integer, data::A; is_extended::Bool=false) where
+    function CANFdFrame(frame_id::Integer, data::A; is_extended::Bool=false) where
         {A <: AbstractArray{<:Integer}}
-        return CANFdFrame(convert(UInt32, can_id), UInt8[data...]; is_extended)
+        return CANFdFrame(convert(UInt32, frame_id), UInt8[data...]; is_extended)
     end
 
     """
     """
-    function CANFdFrame(can_id::Integer, data::Integer...; is_extended::Bool=false)
-        return CANFdFrame(convert(UInt32, can_id), UInt8[data...]; is_extended)
+    function CANFdFrame(frame_id::Integer, data::Integer...; is_extended::Bool=false)
+        return CANFdFrame(convert(UInt32, frame_id), UInt8[data...]; is_extended)
     end
 
     """
     """
-    function can_id(frame::AbstractCANFrame)::UInt32
+    function frame_id(frame::AbstractCANFrame)::UInt32
         if is_extended(frame)
-            return frame.can_id & 0x1F_FF_FF_FF
+            return frame.frame_id & 0x1F_FF_FF_FF
         else
-            return frame.can_id & 0x7_FF
+            return frame.frame_id & 0x7_FF
         end
     end
 
@@ -120,5 +112,5 @@ module Frames
     end
 
     export AbstractCANFrame, CANFdFrame, CANFrame
-    export can_id, data, dlc, is_extended, is_standard, max_size
+    export frame_id, data, dlc, is_extended, is_standard, max_size
 end
