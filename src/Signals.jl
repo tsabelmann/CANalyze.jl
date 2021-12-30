@@ -640,4 +640,10 @@ module Signals
     function check(sig::NamedSignal{T}, available_bytes::UInt8)::Bool where {T}
         return check(signal(sig), available_bytes)
     end
+
+    export Bit, Unsigned, Signed, Raw, Float16Signal, Float32Signal, Float64Signal
+    export Signal, FloatSignal
+    export NamedSignal
+    export start, factor, offset, byte_order
+    export name, unit, default, signal
 end
