@@ -589,9 +589,11 @@ module Signals
 
             if start_bit_in_byte != 7 && start_bit_in_byte != 0
                 start_bit = 8*start_byte + (7 - start_bit_in_byte)
+            else
+                start_bit = start(signal)
             end
 
-            new_shift = 8*available_bytes - start_bit - length
+            new_shift = 8*available_bytes - start_bit - length(signal)
             if new_shift < 0
                 return false
             end
@@ -615,11 +617,14 @@ module Signals
             start_bit_in_byte = start(signal) % 8
             start_byte = div(start(signal), 8)
 
+
             if start_bit_in_byte != 7 && start_bit_in_byte != 0
                 start_bit = 8*start_byte + (7 - start_bit_in_byte)
+            else
+                start_bit = start(signal)
             end
 
-            new_shift = 8*available_bytes - start_bit - length
+            new_shift = 8*available_bytes - start_bit - length(signal)
             if new_shift < 0
                 return false
             end
