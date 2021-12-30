@@ -52,14 +52,6 @@ module Messages
         return Message(frame_id, dlc, name, sigs; strict=strict)
     end
 
-    function Message(frame_id::Integer, dlc::Integer, name::String,
-                     signal::Signals.NamedSignal; strict::Bool=false)
-        frame_id = convert(UInt32, frame_id)
-        dlc = convert(UInt8, dlc)
-        signals = Dict(Signals.name(signal) => signal)
-        return Message(frame_id, dlc, name, signals; strict=strict)
-    end
-
     function frame_id(message::Message)::UInt32
         return message.frame_id & 0x7F_FF_FF_FF
     end
