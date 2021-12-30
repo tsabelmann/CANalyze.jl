@@ -1,4 +1,4 @@
-module CANTools
+module CANalyze
     include("Utils.jl")
     using .Utils
 
