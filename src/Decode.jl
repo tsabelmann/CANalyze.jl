@@ -9,14 +9,18 @@ module Decode
     """
     """
     function decode(signal::Signals.NamedSignal{T}, can_frame::Frames.CANFrame)::T where {T}
-        return decode(signal.signal, can_frame)
+        try
+            sig = Signals.signal(signal)
+            return decode(sig, can_frame)
+        catch
+            return Signals.default(signal)
+        end
     end
 
     """
     """
-    function decode(signal::Signals.UnnamedSignal{T},
-                    can_frame::Frames.CANFrame,
-                    default::R)::Union{T,R} where {T,R}
+    function decode(signal::Signals.UnnamedSignal{T}, can_frame::Frames.CANFrame,
+                    default::D)::Union{T,D} where {T,D}
         try
             return decode(signal, can_frame)
         catch
@@ -207,5 +211,15 @@ module Decode
 
         result = value & Utils.mask(UInt64, length)
         return UInt64(result)
+    end
+
+    function decode(message::Messages.Message, can_frame::Frames.CANFrame)
+        d = Dict()
+        for (key, signal) in message
+            value = decode(signal, can_frame)
+            d[key] = value
+        end
+
+        return d
     end
 end
