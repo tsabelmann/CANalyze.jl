@@ -25,13 +25,19 @@ module Frames
     """
     function CANFrame(frame_id::Integer, data::A; is_extended::Bool=false) where
         {A <: AbstractArray{<:Integer}}
-        return CANFrame(convert(UInt32, frame_id), UInt8[data...])
+        return CANFrame(convert(UInt32, frame_id), UInt8[data...]; is_extended=is_extended)
     end
 
     """
     """
     function CANFrame(frame_id::Integer, data::Integer...; is_extended::Bool=false)
-        return CANFrame(convert(UInt32, frame_id), UInt8[data...]; is_extended)
+        return CANFrame(convert(UInt32, frame_id), UInt8[data...]; is_extended=is_extended)
+    end
+
+    """
+    """
+    function CANFrame(frame_id::Integer; is_extended=false)
+        return CANFrame(convert(UInt32, frame_id), UInt8[]; is_extended=is_extended)
     end
 
     """
