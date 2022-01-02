@@ -1,9 +1,5 @@
-using CANTools
+using CANalyze
 using Test
 
 @info "Starting tests..."
-
-include("Endian.jl")
-include("Mask.jl")
-
-@info "Ending tests..."
+include("Utils.jl")

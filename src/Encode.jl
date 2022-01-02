@@ -1,6 +1,9 @@
+"""
+"""
 module Encode
-    # include("Variable.jl")
-    # import .Variable
-
+    import ..Utils
+    import ..Frames
+    import ..Signals
+    import ..Messages
 
 end

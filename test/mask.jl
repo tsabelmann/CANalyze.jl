@@ -1,7 +1,8 @@
-using CANTools.Utils
+using CANalyze.Utils
 using Test
 
-@testset "Mask" begin
+@info "mask tests..."
+@testset "mask" begin
     @testset "zero_mask" begin
         @test zero_mask(UInt8) == zero(UInt8)
         @test zero_mask(UInt16) == zero(UInt16)
@@ -103,5 +104,4 @@ using Test
             @test mask(UInt128, i, 0) == mask(UInt128, i)
         end
     end
-
 end
