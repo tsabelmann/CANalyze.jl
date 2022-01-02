@@ -33,6 +33,7 @@ using Test
         frame2 = CANFrame(0x14, 1, 2, 3, 4; is_extended=true)
         @test frame1 == frame2
     end
+end
 
-    
+@testset "frame_id" begin
 end
