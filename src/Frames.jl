@@ -1,6 +1,12 @@
 module Frames
+    import Base
+
+    """
+    """
     abstract type AbstractCANFrame end
 
+    """
+    """
     mutable struct CANFrame <: AbstractCANFrame
         frame_id::UInt32
         data::Array{UInt8,1}
@@ -57,6 +63,30 @@ module Frames
     """
     function CANFdFrame(frame_id::Integer, data::Integer...; is_extended::Bool=false)
         return CANFdFrame(convert(UInt32, frame_id), UInt8[data...]; is_extended)
+    end
+
+    """
+    """
+    function Base.:(==)(lhs::AbstractCANFrame, rhs::AbstractCANFrame)::Bool
+        return false
+    end
+
+    """
+    """
+    function Base.:(==)(lhs::CANFrame, rhs::CANFrame)::Bool
+        if frame_id(lhs) != frame_id(rhs)
+            return false
+        end
+
+        if data(lhs) != data(rhs)
+            return false
+        end
+
+        if is_extended(lhs) != is_extended(rhs)
+            return false
+        end
+
+        return true
     end
 
     """
