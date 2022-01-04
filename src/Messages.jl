@@ -1,4 +1,4 @@
-"""
+"""The module provides the Message type that bundles signals.
 """
 module Messages
 import Base
