@@ -474,6 +474,24 @@ module Signals
 
     """
     """
+    function NamedSignal(name::String;
+                         unit::Union{Nothing,String}=nothing,
+                         default::Union{Nothing,T}=nothing,
+                         signal::UnnamedSignal{T}) where {T}
+        return NamedSignal(name, unit, default, signal)
+    end
+
+    """
+    """
+    function NamedSignal(; name::String,
+                         unit::Union{Nothing,String}=nothing,
+                         default::Union{Nothing,T}=nothing,
+                         signal::UnnamedSignal{T}) where {T}
+        return NamedSignal(name, unit, default, signal)
+    end
+
+    """
+    """
     function name(signal::NamedSignal{T})::String where {T}
         return signal.name
     end
