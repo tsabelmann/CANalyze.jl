@@ -273,5 +273,4 @@ end
 export to_bytes, from_bytes
 export is_little_endian, is_big_endian
 export mask, zero_mask, full_mask
-
 end
