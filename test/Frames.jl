@@ -70,7 +70,7 @@ end
 
     @testset "is_extended_2" begin
         frame = CANFrame(0x0AFF; is_extended=false)
-        @test is_extended(frame) == false 
+        @test is_extended(frame) == false
         @test is_standard(frame) == true
     end
 end
@@ -79,5 +79,20 @@ end
     @testset "max_size_1" begin
         frame = CANFrame(0x0AFF; is_extended=true)
         @test max_size(typeof(frame)) == 8
+    end
+
+    @testset "max_size_2" begin
+        frame = CANFdFrame(0x0AFF; is_extended=true)
+        @test max_size(typeof(frame)) == 64
+    end
+end
+
+@testset "too_much_data" begin
+    @testset "too_much_data_1" begin
+        @test_throws DomainError CANFrame(0x0AFF, [i for i=1:9]; is_extended=true)
+    end
+
+    @testset "too_much_data_2" begin
+        @test_throws DomainError CANFdFrame(0x0AFF, [i for i=1:65]; is_extended=true)
     end
 end
