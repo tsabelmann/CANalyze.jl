@@ -15,6 +15,12 @@ makedocs(;
     ),
     pages=[
         "Home" => "index.md",
+        "Usage" => [
+            "Signal" => "examples/signal.md",
+            "Message" => "examples/message.md",
+            "Database" => "examples/database.md",
+            "Decode" => "examples/decode.md"
+        ],
         "Documentation" => [
             "Frames" => "frames.md",
             "Utils" => "utils.md",

@@ -1,25 +1,25 @@
 module CANalyze
-    include("Utils.jl")
-    using .Utils
+include("Utils.jl")
+using .Utils
 
-    include("Frames.jl")
-    using .Frames
+include("Frames.jl")
+using .Frames
 
-    include("Signals.jl")
-    using .Signals
+include("Signals.jl")
+using .Signals
 
-    include("Messages.jl")
-    using .Messages
+include("Messages.jl")
+using .Messages
 
-    include("Databases.jl")
-    using .Databases
+include("Databases.jl")
+using .Databases
 
-    include("Decode.jl")
-    using .Decode
+include("Decode.jl")
+using .Decode
 
-    include("Encode.jl")
-    using .Encode
+include("Encode.jl")
+using .Encode
 
-    include("IO.jl")
-    using .IO
+include("IO.jl")
+using .IO
 end

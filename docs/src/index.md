@@ -1,8 +1,8 @@
 # CANalyze.jl
 
-[![Build status](https://github.com/tsabelmann/CANTools.jl/workflows/CI/badge.svg)](https://github.com/tsabelmann/CANTools.jl/actions)
-[![codecov](https://codecov.io/gh/tsabelmann/CANTools.jl/branch/main/graph/badge.svg?token=V7VSDSOX1H)](https://codecov.io/gh/tsabelmann/CANTools.jl)
-[![Documentation](https://img.shields.io/badge/docs-latest-blue.svg)](https://tsabelmann.github.io/CANTools.jl/dev)
+[![Build status](https://github.com/tsabelmann/CANalyze.jl/workflows/CI/badge.svg)](https://github.com/tsabelmann/CANalyze.jl/actions)
+[![codecov](https://codecov.io/gh/tsabelmann/CANalyze.jl/branch/main/graph/badge.svg?token=V7VSDSOX1H)](https://codecov.io/gh/tsabelmann/CANalyze.jl)
+[![Documentation](https://img.shields.io/badge/docs-latest-blue.svg)](https://tsabelmann.github.io/CANalyze.jl/dev)
 [![Code Style: Blue](https://img.shields.io/badge/code%20style-blue-4495d1.svg)](https://github.com/invenia/BlueStyle)
 
 *Julia package for analyzing CAN-bus data using messages and variables*
