@@ -75,3 +75,9 @@ end
     end
 end
 
+@testset "max_size" begin
+    @testset "max_size_1" begin
+        frame = CANFrame(0x0AFF; is_extended=true)
+        @test max_size(typeof(frame)) == 8
+    end
+end
