@@ -1,4 +1,6 @@
-"""
+"""The module provides utilities to convert numbers into and from byte representations,
+functions to check whether the system is little-endian or big-endian, and functions to
+create bitmasks.
 """
 module Utils
 """
@@ -7,7 +9,7 @@ module Utils
 Creates the byte representation of the number `num`.
 
 # Arguments
-- `num::Number`: the type of the mask
+- `num::Number`: the number from which we retrieve the bytes.
 
 # Returns
 - `Vector{UInt8}`: the bytes representation of the number `num`
