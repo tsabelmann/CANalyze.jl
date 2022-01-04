@@ -1,3 +1,7 @@
+"""The module provides signals, a mechanism that models data retrievable from or
+written to CAN-bus data. A signal models one data entity, e.g., one variable inside the
+CAN-bus data.
+"""
 module Signals
 import Base
 
