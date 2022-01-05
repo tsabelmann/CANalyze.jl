@@ -389,3 +389,107 @@ end
         @test Signals.signal(signal) == s
     end
 end
+
+@testset "bits" begin
+    @testset "bit_1" begin
+        signal = Bit(42)
+        bits = Signals.Bits(signal)
+        @test bits == Signals.Bits(42)
+    end
+
+    @testset "unsigned_1" begin
+        signal = Signals.Unsigned(7, 5, 1.0, 0.0, :little_endian)
+        bits = Signals.Bits(signal)
+        @test bits == Signals.Bits(7, 8, 9, 10, 11)
+    end
+
+    @testset "unsigned_2" begin
+        signal = Signals.Unsigned(7, 5, 1.0, 0.0, :big_endian)
+        bits = Signals.Bits(signal)
+        @test bits == Signals.Bits(7, 6, 5, 4, 3)
+    end
+
+    @testset "signed_1" begin
+        signal = Signals.Signed(7, 5, 1.0, 0.0, :little_endian)
+        bits = Signals.Bits(signal)
+        @test bits == Signals.Bits(7, 8, 9, 10, 11)
+    end
+
+    @testset "signed_2" begin
+        signal = Signals.Signed(3, 5, 1.0, 0.0, :big_endian)
+        bits = Signals.Bits(signal)
+        @test bits == Signals.Bits(3, 2, 1, 0, 15)
+    end
+
+    @testset "float16_1" begin
+        signal = Signals.Float16Signal(0; byte_order=:little_endian)
+        bits = Signals.Bits(signal)
+        @test bits == Signals.Bits(Set{UInt16}([i for i=0:15]))
+    end
+
+    @testset "float16_2" begin
+        signal = Signals.Float16Signal(0; byte_order=:big_endian)
+        bits = Signals.Bits(signal)
+        @test bits == Signals.Bits(0, 15, 14, 13, 12, 11, 10, 9, 8, 23, 22, 21, 20, 19, 18, 17)
+    end
+
+    @testset "float32_1" begin
+        signal = Signals.Float32Signal(0; byte_order=:little_endian)
+        bits = Signals.Bits(signal)
+        @test bits == Signals.Bits(Set{UInt16}([i for i=0:31]))
+    end
+
+    @testset "float32_2" begin
+        signal = Signals.Float32Signal(39; byte_order=:big_endian)
+        bits = Signals.Bits(signal)
+        @test bits == Signals.Bits(Set{UInt16}([i for i=32:63]))
+    end
+
+    @testset "float64_1" begin
+        signal = Signals.Float64Signal(0; byte_order=:little_endian)
+        bits = Signals.Bits(signal)
+        @test bits == Signals.Bits(Set{UInt16}([i for i=0:63]))
+    end
+
+    @testset "float64_2" begin
+        signal = Signals.Float64Signal(7; byte_order=:big_endian)
+        bits = Signals.Bits(signal)
+        @test bits == Signals.Bits(Set{UInt16}([i for i=0:63]))
+    end
+end
+
+@testset "share_bits" begin
+    @testset "share_bits_1" begin
+        sig1 = Signals.Float16Signal(0; byte_order=:little_endian)
+        sig2 = Signals.Float16Signal(0; byte_order=:little_endian)
+
+        bits1 = Signals.Bits(sig1)
+        bits2 = Signals.Bits(sig2)
+        @test Signals.share_bits(bits1, bits2)
+    end
+
+    @testset "share_bits_2" begin
+        sig1 = Signals.Float16Signal(0; byte_order=:little_endian)
+        sig2 = Signals.Float16Signal(16; byte_order=:little_endian)
+
+        bits1 = Signals.Bits(sig1)
+        bits2 = Signals.Bits(sig2)
+        @test !Signals.share_bits(bits1, bits2)
+    end 
+end
+
+@testset "overlap" begin
+    @testset "overlap_1" begin
+        sig1 = Signals.Float16Signal(0; byte_order=:little_endian)
+        sig2 = Signals.Float16Signal(0; byte_order=:little_endian)
+
+        @test Signals.overlap(sig1, sig2)
+    end
+
+    @testset "overlap_2" begin
+        sig1 = Signals.Float16Signal(0; byte_order=:little_endian)
+        sig2 = Signals.Float16Signal(16; byte_order=:little_endian)
+
+        @test !Signals.overlap(sig1, sig2)
+    end 
+end
