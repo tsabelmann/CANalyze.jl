@@ -584,6 +584,10 @@ function Bits(sig::NamedSignal{T}) where {T}
     return Bits(signal(sig))
 end
 
+function Base.:(==)(lhs::Bits, rhs::Bits)::Bool
+    return (lhs.bits) == (rhs.bits)
+end
+
 """
 """
 function share_bits(lhs::Bits, rhs::Bits)::Bool
