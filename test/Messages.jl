@@ -1,5 +1,5 @@
 using CANalyze.Signals
-using CANalyze.Messages
+import CANalyze.Messages
 using Test
 
 @info "CANalyze.Messages tests..."
@@ -52,7 +52,7 @@ using Test
         signal3 = Signals.NamedSignal("C", nothing, nothing, Signals.Unsigned(32, 8, 2, 20, :little_endian))
 
         m = Messages.Message(0x1FF, 8, "ABC", signal1, signal2, signal3; strict=true)
-        @test frame_id(m) == 0x1FF
+        @test Messages.frame_id(m) == 0x1FF
     end
 
     @testset "dlc_1" begin

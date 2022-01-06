@@ -1,6 +1,6 @@
 using CANalyze.Signals
-using CANalyze.Messages
-using CANalyze.Databases
+import CANalyze.Messages
+import CANalyze.Databases
 using Test
 
 @info "CANalyze.Databases tests..."
@@ -13,7 +13,7 @@ using Test
 
         m1 = Messages.Message(0xA, 8, "A", signal1, signal2, signal3; strict=true)
         m2 = Messages.Message(0xB, 8, "B", signal1, signal2, signal3; strict=true)
-        d = Database(m1, m2)
+        d = Databases.Database(m1, m2)
 
         @test true
     end
@@ -25,7 +25,7 @@ using Test
 
         m1 = Messages.Message(0xA, 8, "A", signal1, signal2, signal3; strict=true)
         m2 = Messages.Message(0xB, 8, "A", signal1, signal2, signal3; strict=true)
-        @test_throws DomainError Database(m1, m2)
+        @test_throws DomainError Databases.Database(m1, m2)
     end
 
     @testset "database_3" begin
@@ -35,7 +35,7 @@ using Test
 
         m1 = Messages.Message(0xA, 8, "A", signal1, signal2, signal3; strict=true)
         m2 = Messages.Message(0xA, 8, "B", signal1, signal2, signal3; strict=true)
-        @test_throws DomainError Database(m1, m2)
+        @test_throws DomainError Databases.Database(m1, m2)
     end
 
     @testset "get_1" begin
@@ -45,7 +45,7 @@ using Test
 
         m1 = Messages.Message(0xA, 8, "A", signal1, signal2, signal3; strict=true)
         m2 = Messages.Message(0xB, 8, "B", signal1, signal2, signal3; strict=true)
-        d = Database(m1, m2)
+        d = Databases.Database(m1, m2)
 
         @test d["A"] == m1
         @test d["B"] == m2
@@ -58,7 +58,7 @@ using Test
 
         m1 = Messages.Message(0xA, 8, "A", signal1, signal2, signal3; strict=true)
         m2 = Messages.Message(0xB, 8, "B", signal1, signal2, signal3; strict=true)
-        d = Database(m1, m2)
+        d = Databases.Database(m1, m2)
 
         @test_throws KeyError d["C"]
     end
@@ -70,7 +70,7 @@ using Test
 
         m1 = Messages.Message(0xA, 8, "A", signal1, signal2, signal3; strict=true)
         m2 = Messages.Message(0xB, 8, "B", signal1, signal2, signal3; strict=true)
-        d = Database(m1, m2)
+        d = Databases.Database(m1, m2)
 
         @test d[0xA] == m1
         @test d[0xB] == m2
@@ -83,7 +83,7 @@ using Test
 
         m1 = Messages.Message(0xA, 8, "A", signal1, signal2, signal3; strict=true)
         m2 = Messages.Message(0xB, 8, "B", signal1, signal2, signal3; strict=true)
-        d = Database(m1, m2)
+        d = Databases.Database(m1, m2)
 
         @test_throws KeyError d[0xC]
     end
@@ -95,7 +95,7 @@ using Test
 
         m1 = Messages.Message(0xA, 8, "A", signal1, signal2, signal3; strict=true)
         m2 = Messages.Message(0xB, 8, "B", signal1, signal2, signal3; strict=true)
-        d = Database(m1, m2)
+        d = Databases.Database(m1, m2)
 
         @test get(d, "A", nothing) == m1
         @test get(d, "B", nothing) == m2
