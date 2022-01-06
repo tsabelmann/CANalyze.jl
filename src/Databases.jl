@@ -67,4 +67,6 @@ module Databases
         key = convert(UInt32, key)
         return get(db, key, default)
     end
+
+    export Database
 end
