@@ -1,4 +1,3 @@
-using CANalyze
 using Test
 
 @info "Starting tests..."
