@@ -56,6 +56,11 @@ end
         @test_throws DomainError Signals.Unsigned{Float16}(start=0, length=0)
     end
 
+    @testset "unsigned_signal_6" begin
+        @test_throws DomainError Signals.Unsigned{Float16}(start=0, length=0,
+                                                           byte_order=:mixed_endian)
+    end
+
     @testset "start_1" begin
         signal = Signals.Unsigned(23, 8, 1.0, 0.0, :little_endian)
         @test start(signal) == 23
@@ -113,6 +118,11 @@ end
         @test_throws DomainError Signals.Signed{Float16}(start=0, length=0)
     end
 
+    @testset "signed_signal_6" begin
+        @test_throws DomainError Signals.Signed{Float16}(start=0, length=0,
+                                                         byte_order=:mixed_endian)
+    end
+
     @testset "start_1" begin
         signal = Signals.Signed(23, 8, 1.0, 0.0, :little_endian)
         @test start(signal) == 23
@@ -152,6 +162,12 @@ end
 
     @testset "float16_signal_2" begin
         signal = Signals.Float16Signal(start=0, factor=1.0, offset=0.0,
+                                       byte_order=:little_endian)
+        @test true
+    end
+
+    @testset "float16_signal_3" begin
+        signal = Signals.Float16Signal(start=0, factor=1, offset=0,
                                        byte_order=:little_endian)
         @test true
     end
@@ -205,6 +221,12 @@ end
         @test true
     end
 
+    @testset "float32_signal_3" begin
+        signal = Signals.Float32Signal(start=0, factor=1, offset=0,
+                                       byte_order=:little_endian)
+        @test true
+    end
+
     @testset "start_1" begin
         signal = Signals.Float32Signal(start=42, factor=1.0, offset=0.0,
                                        byte_order=:little_endian)
@@ -254,6 +276,12 @@ end
         @test true
     end
 
+    @testset "float64_signal_3" begin
+        signal = Signals.Float64Signal(start=0, factor=1, offset=0,
+                                       byte_order=:little_endian)
+        @test true
+    end
+
     @testset "start_1" begin
         signal = Signals.Float64Signal(start=42, factor=1.0, offset=0.0,
                                        byte_order=:little_endian)
@@ -292,6 +320,16 @@ end
 end
 
 
+@testset "float_signal" begin
+    @testset "float_signal_1" begin
+        signal = Signals.FloatSignal(start=0, factor=2, offset=-1337,
+                                     byte_order=:big_endian)
+        @test true
+    end
+
+
+end
+
 @testset "raw_signal" begin
     @testset "raw_signal_1" begin
         signal = Signals.Raw(0, 8, :little_endian)
@@ -301,6 +339,14 @@ end
     @testset "raw_signal_2" begin
         signal = Signals.Raw(start=0, length=8, byte_order=:little_endian)
         @test true
+    end
+
+    @testset "raw_signal_3" begin
+        @test_throws DomainError Signals.Raw(start=0, length=0, byte_order=:little_endian)
+    end
+
+    @testset "raw_signal_4" begin
+        @test_throws DomainError Signals.Raw(start=0, length=1, byte_order=:mixed_endian)
     end
 
     @testset "start_1" begin
@@ -456,6 +502,14 @@ end
         bits = Signals.Bits(signal)
         @test bits == Signals.Bits(Set{UInt16}([i for i=0:63]))
     end
+
+    @testset "named_signal_1" begin
+        s = Signals.Float64Signal(7; byte_order=:big_endian)
+        signal = Signals.NamedSignal("ABC", nothing, nothing, s)
+        bits = Signals.Bits(signal)
+        @test bits == Signals.Bits(Set{UInt16}([i for i=0:63]))
+    end
+
 end
 
 @testset "share_bits" begin
@@ -563,5 +617,61 @@ end
     @testset "raw_2" begin
         signal = Signals.Raw(0, 64, :big_endian)
         @test Signals.check(signal, UInt8(9))
+    end
+
+    @testset "named_signal_1" begin
+        s = Signals.Raw(0, 64, :big_endian)
+        signal = Signals.NamedSignal("ABC", nothing, nothing, s)
+        @test Signals.check(signal, UInt8(9))
+    end
+end
+
+@testset "equal" begin
+    @testset "bit_1" begin
+        bit1 = Signals.Bit(20)
+        bit2 = Signals.Bit(20)
+        @test bit1 == bit2
+    end
+
+    @testset "bit_2" begin
+        bit1 = Signals.Bit(20)
+        bit2 = Signals.Bit(21)
+        @test !(bit1 == bit2)
+    end
+
+    @testset "unsigned_1" begin
+        sig1 = Signals.Unsigned(0, 8, 1, 0, :little_endian)
+        sig2 = Signals.Unsigned(0, 8, 1, 0, :little_endian)
+        @test sig1 == sig2
+    end
+
+    @testset "unsigned_2" begin
+        sig1 = Signals.Unsigned(0, 8, 1, 0, :little_endian)
+        sig2 = Signals.Unsigned(1, 8, 1, 0, :little_endian)
+        @test !(sig1 == sig2)
+    end
+
+    @testset "unsigned_3" begin
+        sig1 = Signals.Unsigned(0, 8, 1, 0, :little_endian)
+        sig2 = Signals.Unsigned(0, 9, 1, 0, :little_endian)
+        @test !(sig1 == sig2)
+    end
+
+    @testset "unsigned_4" begin
+        sig1 = Signals.Unsigned(0, 8, 1, 0, :little_endian)
+        sig2 = Signals.Unsigned(0, 8, 2, 0, :little_endian)
+        @test !(sig1 == sig2)
+    end
+
+    @testset "unsigned_5" begin
+        sig1 = Signals.Unsigned(0, 8, 1, 0, :little_endian)
+        sig2 = Signals.Unsigned(0, 8, 1, -1, :little_endian)
+        @test !(sig1 == sig2)
+    end
+
+    @testset "unsigned_6" begin
+        sig1 = Signals.Unsigned(0, 8, 1, 0, :little_endian)
+        sig2 = Signals.Unsigned(0, 8, 1, 0, :big_endian)
+        @test !(sig1 == sig2)
     end
 end
