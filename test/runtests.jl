@@ -5,3 +5,4 @@ using Test
 include("Utils.jl")
 include("Frames.jl")
 include("Signals.jl")
+include("Messages.jl")
