@@ -31,7 +31,7 @@ end
 function decode(signal::Signals.Bit, can_frame::Frames.CANFrame)::Bool
     start = Signals.start(signal)
 
-    if start >= 8Frames.dlc(data)
+    if start >= 8Frames.dlc(can_frame)
         throw(DomainError(start_bit, "CANFrame does not have data at bit position"))
     else
         mask = Utils.mask(UInt64, 1, start)
