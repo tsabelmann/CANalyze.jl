@@ -56,15 +56,27 @@ module Databases
     end
 
     function Base.get(db::Database, key::String, default=nothing)
-        return get(db.name_index, key, default)
+        try
+            value = db[key]
+            return value
+        catch
+            return default
+        end
     end
 
     function Base.get(db::Database, key::UInt32, default=nothing)
-        return get(db.frame_id_index, key, default)
+        try
+            value = db[key]
+            return value
+        catch
+            return default
+        end
     end
 
     function Base.get(db::Database, key::Integer, default=nothing)
         key = convert(UInt32, key)
         return get(db, key, default)
     end
+
+    export Database
 end
