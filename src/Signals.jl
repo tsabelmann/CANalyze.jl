@@ -602,59 +602,10 @@ function overlap(lhs::AbstractSignal{R}, rhs::AbstractSignal{S})::Bool where {R,
     return share_bits(lhs_bits, rhs_bits)
 end
 
-function check(signal::AbstractFloatSignal{T}, available_bytes::UInt8)::Bool where {T}
-    if byte_order(signal) == :little_endian
-        if start(signal) + length(signal) - 1 >= 8*available_bytes
-            return false
-        else
-            return true
-        end
-    elseif byte_order(signal) == :big_endian
-        start_bit_in_byte = start(signal) % 8
-        start_byte = div(start(signal), 8)
-
-        if start_bit_in_byte != 7 && start_bit_in_byte != 0
-            start_bit = 8*start_byte + (7 - start_bit_in_byte)
-        else
-            start_bit = start(signal)
-        end
-
-        new_shift = 8*available_bytes - start_bit - length(signal)
-        if new_shift < 0
-            return false
-        end
-
-        return true
-    else
-        return false
-    end
-end
-
-"""
-"""
-function check(signal::AbstractIntegerSignal{T}, available_bytes::UInt8)::Bool where {T}
-    if byte_order(signal) == :little_endian
-        if start(signal) + length(signal) - 1 >= 8*available_bytes
-            return false
-        else
-            return true
-        end
-    elseif byte_order(signal) == :big_endian
-        start_bit_in_byte = start(signal) % 8
-        start_byte = div(start(signal), 8)
-
-
-        if start_bit_in_byte != 7 && start_bit_in_byte != 0
-            start_bit = 8*start_byte + (7 - start_bit_in_byte)
-        else
-            start_bit = start(signal)
-        end
-
-        new_shift = 8*available_bytes - start_bit - length(signal)
-        if new_shift < 0
-            return false
-        end
-
+function check(signal::UnnamedSignal{T}, available_bytes::UInt8)::Bool where {T}
+    bits = Bits(signal)
+    max_byte = max(UInt8[div(bit,8) for bit in bits.bits]...)
+    if max_byte < available_bytes
         return true
     else
         return false
