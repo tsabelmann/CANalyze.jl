@@ -554,4 +554,14 @@ end
         signal = Signals.Float64Signal(0; byte_order=:big_endian)
         @test !Signals.check(signal, UInt8(8))
     end
+
+    @testset "raw_1" begin
+        signal = Signals.Raw(0, 64, :little_endian)
+        @test Signals.check(signal, UInt8(8))
+    end
+
+    @testset "raw_2" begin
+        signal = Signals.Raw(0, 64, :big_endian)
+        @test Signals.check(signal, UInt8(9))
+    end
 end
