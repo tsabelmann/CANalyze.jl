@@ -151,43 +151,43 @@ end
     end
 
     @testset "float16_signal_2" begin
-        signal = Signals.Float16Signal(start=0, factor=1.0, offset=0.0, 
+        signal = Signals.Float16Signal(start=0, factor=1.0, offset=0.0,
                                        byte_order=:little_endian)
         @test true
     end
 
     @testset "start_1" begin
-        signal = Signals.Float16Signal(start=42, factor=1.0, offset=0.0, 
+        signal = Signals.Float16Signal(start=42, factor=1.0, offset=0.0,
                                        byte_order=:little_endian)
         @test start(signal) == 42
     end
 
     @testset "length_1" begin
-        signal = Signals.Float16Signal(start=0, factor=1.0, offset=0.0, 
+        signal = Signals.Float16Signal(start=0, factor=1.0, offset=0.0,
                                        byte_order=:little_endian)
         @test length(signal) == 16
     end
 
     @testset "factor_1" begin
-        signal = Signals.Float16Signal(start=0, factor=1.0, offset=0.0, 
+        signal = Signals.Float16Signal(start=0, factor=1.0, offset=0.0,
                                        byte_order=:little_endian)
         @test factor(signal) == 1
     end
 
     @testset "offset_1" begin
-        signal = Signals.Float16Signal(start=0, factor=1.0, offset=1337, 
+        signal = Signals.Float16Signal(start=0, factor=1.0, offset=1337,
                                        byte_order=:little_endian)
         @test offset(signal) == 1337
     end
 
     @testset "byte_order_1" begin
-        signal = Signals.Float16Signal(start=0, factor=1.0, offset=0.0, 
+        signal = Signals.Float16Signal(start=0, factor=1.0, offset=0.0,
                                        byte_order=:little_endian)
         @test byte_order(signal) == :little_endian
     end
 
     @testset "byte_order_2" begin
-        signal = Signals.Float16Signal(start=0, factor=1.0, offset=0.0, 
+        signal = Signals.Float16Signal(start=0, factor=1.0, offset=0.0,
                                        byte_order=:big_endian)
         @test byte_order(signal) == :big_endian
     end
@@ -200,43 +200,43 @@ end
     end
 
     @testset "float32_signal_2" begin
-        signal = Signals.Float32Signal(start=0, factor=1.0, offset=0.0, 
+        signal = Signals.Float32Signal(start=0, factor=1.0, offset=0.0,
                                        byte_order=:little_endian)
         @test true
     end
 
     @testset "start_1" begin
-        signal = Signals.Float32Signal(start=42, factor=1.0, offset=0.0, 
+        signal = Signals.Float32Signal(start=42, factor=1.0, offset=0.0,
                                        byte_order=:little_endian)
         @test start(signal) == 42
     end
 
     @testset "length_1" begin
-        signal = Signals.Float32Signal(start=0, factor=1.0, offset=0.0, 
+        signal = Signals.Float32Signal(start=0, factor=1.0, offset=0.0,
                                        byte_order=:little_endian)
         @test length(signal) == 32
     end
 
     @testset "factor_1" begin
-        signal = Signals.Float32Signal(start=0, factor=1.0, offset=0.0, 
+        signal = Signals.Float32Signal(start=0, factor=1.0, offset=0.0,
                                        byte_order=:little_endian)
         @test factor(signal) == 1
     end
 
     @testset "offset_1" begin
-        signal = Signals.Float32Signal(start=0, factor=1.0, offset=1337, 
+        signal = Signals.Float32Signal(start=0, factor=1.0, offset=1337,
                                        byte_order=:little_endian)
         @test offset(signal) == 1337
     end
 
     @testset "byte_order_1" begin
-        signal = Signals.Float32Signal(start=0, factor=1.0, offset=0.0, 
+        signal = Signals.Float32Signal(start=0, factor=1.0, offset=0.0,
                                        byte_order=:little_endian)
         @test byte_order(signal) == :little_endian
     end
 
     @testset "byte_order_2" begin
-        signal = Signals.Float32Signal(start=0, factor=1.0, offset=0.0, 
+        signal = Signals.Float32Signal(start=0, factor=1.0, offset=0.0,
                                        byte_order=:big_endian)
         @test byte_order(signal) == :big_endian
     end
@@ -249,43 +249,43 @@ end
     end
 
     @testset "float64_signal_2" begin
-        signal = Signals.Float64Signal(start=0, factor=1.0, offset=0.0, 
+        signal = Signals.Float64Signal(start=0, factor=1.0, offset=0.0,
                                        byte_order=:little_endian)
         @test true
     end
 
     @testset "start_1" begin
-        signal = Signals.Float64Signal(start=42, factor=1.0, offset=0.0, 
+        signal = Signals.Float64Signal(start=42, factor=1.0, offset=0.0,
                                        byte_order=:little_endian)
         @test start(signal) == 42
     end
 
     @testset "length_1" begin
-        signal = Signals.Float64Signal(start=0, factor=1.0, offset=0.0, 
+        signal = Signals.Float64Signal(start=0, factor=1.0, offset=0.0,
                                        byte_order=:little_endian)
         @test length(signal) == 64
     end
 
     @testset "factor_1" begin
-        signal = Signals.Float64Signal(start=0, factor=1.0, offset=0.0, 
+        signal = Signals.Float64Signal(start=0, factor=1.0, offset=0.0,
                                        byte_order=:little_endian)
         @test factor(signal) == 1
     end
 
     @testset "offset_1" begin
-        signal = Signals.Float64Signal(start=0, factor=1.0, offset=1337, 
+        signal = Signals.Float64Signal(start=0, factor=1.0, offset=1337,
                                        byte_order=:little_endian)
         @test offset(signal) == 1337
     end
 
     @testset "byte_order_1" begin
-        signal = Signals.Float64Signal(start=0, factor=1.0, offset=0.0, 
+        signal = Signals.Float64Signal(start=0, factor=1.0, offset=0.0,
                                        byte_order=:little_endian)
         @test byte_order(signal) == :little_endian
     end
 
     @testset "byte_order_2" begin
-        signal = Signals.Float64Signal(start=0, factor=1.0, offset=0.0, 
+        signal = Signals.Float64Signal(start=0, factor=1.0, offset=0.0,
                                        byte_order=:big_endian)
         @test byte_order(signal) == :big_endian
     end
@@ -334,57 +334,57 @@ end
 
     @testset "named_signal_2" begin
         s = Signals.Raw(0, 8, :little_endian)
-        signal = Signals.NamedSignal(name="ABC", unit=nothing, default=nothing, 
+        signal = Signals.NamedSignal(name="ABC", unit=nothing, default=nothing,
                                      signal=s)
         @test true
     end
 
     @testset "named_signal_3" begin
         s = Signals.Raw(0, 8, :little_endian)
-        @test_throws DomainError Signals.NamedSignal(name="", 
-                                                     unit=nothing, 
-                                                     default=nothing, 
+        @test_throws DomainError Signals.NamedSignal(name="",
+                                                     unit=nothing,
+                                                     default=nothing,
                                                      signal=s)
     end
 
     @testset "name_1" begin
         s = Signals.Raw(0, 8, :little_endian)
-        signal = Signals.NamedSignal(name="ABC", unit=nothing, default=nothing, 
+        signal = Signals.NamedSignal(name="ABC", unit=nothing, default=nothing,
                                      signal=s)
         @test name(signal) == "ABC"
     end
 
     @testset "unit_1" begin
         s = Signals.Raw(0, 8, :little_endian)
-        signal = Signals.NamedSignal(name="ABC", unit=nothing, default=nothing, 
+        signal = Signals.NamedSignal(name="ABC", unit=nothing, default=nothing,
                                      signal=s)
         @test unit(signal) == nothing
     end
 
     @testset "unit_2" begin
         s = Signals.Raw(0, 8, :little_endian)
-        signal = Signals.NamedSignal(name="ABC", unit="Ah", default=nothing, 
+        signal = Signals.NamedSignal(name="ABC", unit="Ah", default=nothing,
                                      signal=s)
         @test unit(signal) == "Ah"
     end
 
     @testset "default_1" begin
         s = Signals.Raw(0, 8, :little_endian)
-        signal = Signals.NamedSignal(name="ABC", unit="Ah", default=nothing, 
+        signal = Signals.NamedSignal(name="ABC", unit="Ah", default=nothing,
                                      signal=s)
         @test default(signal) == nothing
     end
 
     @testset "default_2" begin
         s = Signals.Raw(0, 8, :little_endian)
-        signal = Signals.NamedSignal(name="ABC", unit="Ah", default=UInt(1337), 
+        signal = Signals.NamedSignal(name="ABC", unit="Ah", default=UInt(1337),
                                      signal=s)
         @test default(signal) == 1337
     end
 
     @testset "signal_1" begin
         s = Signals.Raw(0, 8, :little_endian)
-        signal = Signals.NamedSignal(name="ABC", unit="Ah", default=nothing, 
+        signal = Signals.NamedSignal(name="ABC", unit="Ah", default=nothing,
                                      signal=s)
         @test Signals.signal(signal) == s
     end
@@ -475,7 +475,7 @@ end
         bits1 = Signals.Bits(sig1)
         bits2 = Signals.Bits(sig2)
         @test !Signals.share_bits(bits1, bits2)
-    end 
+    end
 end
 
 @testset "overlap" begin
@@ -491,5 +491,67 @@ end
         sig2 = Signals.Float16Signal(16; byte_order=:little_endian)
 
         @test !Signals.overlap(sig1, sig2)
-    end 
+    end
+end
+
+@testset "check" begin
+    @testset "bit_1" begin
+        signal = Signals.Bit(0)
+        @test Signals.check(signal, UInt8(1))
+    end
+
+    @testset "bit_2" begin
+        signal = Signals.Bit(8)
+        @test !Signals.check(signal, UInt8(1))
+    end
+
+    @testset "unsigned_1" begin
+        signal = Signals.Unsigned(7, 5, 1.0, 0.0, :little_endian)
+        @test Signals.check(signal, UInt8(2))
+    end
+
+    @testset "unsigned_2" begin
+        signal = Signals.Unsigned(7, 9, 1.0, 0.0, :big_endian)
+        @test Signals.check(signal, UInt8(2))
+    end
+
+    @testset "signed_1" begin
+        signal = Signals.Signed(7, 5, 1.0, 0.0, :little_endian)
+        @test Signals.check(signal, UInt8(2))
+    end
+
+    @testset "signed_2" begin
+        signal = Signals.Signed(7, 9, 1.0, 0.0, :big_endian)
+        @test Signals.check(signal, UInt8(2))
+    end
+
+    @testset "float16_1" begin
+        signal = Signals.Float16Signal(0; byte_order=:little_endian)
+        @test Signals.check(signal, UInt8(2))
+    end
+
+    @testset "float16_2" begin
+        signal = Signals.Float16Signal(0; byte_order=:big_endian)
+        @test !Signals.check(signal, UInt8(2))
+    end
+
+    @testset "float32_1" begin
+        signal = Signals.Float32Signal(0; byte_order=:little_endian)
+        @test Signals.check(signal, UInt8(4))
+    end
+
+    @testset "float32_2" begin
+        signal = Signals.Float32Signal(0; byte_order=:big_endian)
+        @test !Signals.check(signal, UInt8(4))
+    end
+
+    @testset "float64_1" begin
+        signal = Signals.Float64Signal(0; byte_order=:little_endian)
+        @test Signals.check(signal, UInt8(8))
+    end
+
+    @testset "float64_2" begin
+        signal = Signals.Float64Signal(0; byte_order=:big_endian)
+        @test !Signals.check(signal, UInt8(8))
+    end
 end
