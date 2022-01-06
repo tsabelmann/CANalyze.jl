@@ -1,7 +1,6 @@
 using CANalyze.Frames
 using Test
 
-
 @info "CANalyze.Frames tests..."
 @testset "equal" begin
     @testset "equal_1" begin
