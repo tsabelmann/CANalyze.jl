@@ -4,6 +4,7 @@ import CANalyze.Signals
 import CANalyze.Messages
 import CANalyze.Decode
 using Test
+using Random
 
 @info "CANalyze.Decode tests..."
 
@@ -90,7 +91,7 @@ end
     end
 
     @testset "signed_2" begin
-        for start=0:0
+        for start=0:63
             for len=1:(64-start)
                 m = Utils.mask(UInt64, len, start)
                 signal = Signals.Signed{Float64}(start=start,
@@ -99,21 +100,20 @@ end
                                                  offset=1337,
                                                  byte_order=:little_endian)
                 frame = Frames.CANFrame(0x1FF, Utils.to_bytes(m))
-                @show Signals.factor(signal)
-                @show Signals.offset(signal)
-                @show decode = Decode.decode(signal, frame)
-                @show value = Int(-Utils.mask(UInt64, len)) * Signals.factor(signal) + Signals.offset(signal)
+                decode = Decode.decode(signal, frame)
+                value = Utils.mask(Int64, len) + ~Utils.mask(Int64, len)
+                value = value * Signals.factor(signal) + Signals.offset(signal)
                 @test decode == value
             end
         end
     end
 
     @testset "signed_3" begin
-        signal = Signals.Signed{Float64}(start=7, length=8, factor=2.0, offset=1337,
+        signal = Signals.Signed{Float64}(start=7, length=8, factor=set=1337,
                                          byte_order=:big_endian)
-        frame = Frames.CANFrame(0x1FF, 0xFF)
+        frame = Frames.CANFrame(0x1FF, 0xFE)
         decode = Decode.decode(signal, frame)
-        value = -1 * Signals.factor(signal) + Signals.offset(signal)
+        value = -2 * Signals.factor(signal) + Signals.offset(signal)
         @test decode == value
     end
 end
