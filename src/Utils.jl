@@ -294,9 +294,9 @@ m = Utils.bit_mask(UInt8, Set{UInt16}([0,1,2,3,4,5,6,7]))
 function bit_mask(::Type{T}, bits::Set{UInt16})::T where {T <: Integer}
     result = zero(T)
     for bit in bits
-        result |= (1 << bit)
+        result |= mask(T, 1, bit)
     end
-    return result
+    return T(result)
 end
 
 function bit_mask(::Type{T}, bits::Integer...)::T where {T}
