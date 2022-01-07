@@ -193,3 +193,37 @@ end
         @test decode == 0x1ABC
     end
 end
+
+@testset "named_signal" begin
+    @testset "named_signal_1" begin
+        signal = Signals.Signed{Float64}(start=0,
+                                         length=16,
+                                         factor=2.0,
+                                         offset=1337,
+                                         byte_order=:little_endian)
+        named_signal = Signals.NamedSignal("SIG", nothing, nothing, signal)
+        frame = Frames.CANFrame(0x1FF, 0x01, 0x02)
+        @test Decode.decode(signal, frame) == Decode.decode(named_signal, frame)
+    end
+end
+
+@testset "message" begin
+    @testset "message_1" begin
+        sig1 = Signals.Signed{Float64}(start=0, length=8, byte_order=:little_endian)
+        sig2 = Signals.Signed{Float64}(start=8, length=8, byte_order=:little_endian)
+        sig3 = Signals.Signed{Float64}(start=16, length=8, byte_order=:little_endian)
+
+        named_signal_1 = Signals.NamedSignal("A", nothing, nothing, sig1)
+        named_signal_2 = Signals.NamedSignal("B", nothing, nothing, sig2)
+        named_signal_3 = Signals.NamedSignal("C", nothing, nothing, sig3)
+        signals = [named_signal_1, named_signal_2, named_signal_3]
+
+        frame = Frames.CANFrame(0x1FF, 0x01, 0x02, 0x03)
+        m = Messages.Message(0x1FF, 8, "M", named_signal_1, named_signal_2, named_signal_3)
+
+        value = Decode.decode(m, frame)
+        for signal in signals
+            @test value[Signals.name(signal)] == Decode.decode(signal, frame)
+        end
+    end
+end
