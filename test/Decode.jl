@@ -1,14 +1,13 @@
-import CANalyze.Utils
-import CANalyze.Frames
-import CANalyze.Signals
-import CANalyze.Messages
-import CANalyze.Decode
 using Test
-using Random
 
 @info "CANalyze.Decode tests..."
-
 @testset "bit" begin
+    import CANalyze.Utils
+    import CANalyze.Frames
+    import CANalyze.Signals
+    import CANalyze.Messages
+    import CANalyze.Decode
+
     for start=0:63
         m = Utils.mask(UInt64, 1, start)
         signal = Signals.Bit(start=start)
@@ -18,6 +17,12 @@ using Random
 end
 
 @testset "unsigned" begin
+    import CANalyze.Utils
+    import CANalyze.Frames
+    import CANalyze.Signals
+    import CANalyze.Messages
+    import CANalyze.Decode
+
     @testset "unsigned_1" begin
         for start=0:63
             for len=1:(64-start)
@@ -73,6 +78,13 @@ end
 end
 
 @testset "signed" begin
+    import CANalyze.Utils
+    import CANalyze.Frames
+    import CANalyze.Signals
+    import CANalyze.Messages
+    import CANalyze.Decode
+    using Random
+
     @testset "signed_1" begin
         for start=0:62
             for len=1:(64-start)
@@ -138,6 +150,12 @@ end
 
 
 @testset "raw" begin
+    import CANalyze.Utils
+    import CANalyze.Frames
+    import CANalyze.Signals
+    import CANalyze.Messages
+    import CANalyze.Decode
+
     @testset "raw_1" begin
         for start=0:63
             for len=1:(64-start)
@@ -195,6 +213,12 @@ end
 end
 
 @testset "named_signal" begin
+    import CANalyze.Utils
+    import CANalyze.Frames
+    import CANalyze.Signals
+    import CANalyze.Messages
+    import CANalyze.Decode
+
     @testset "named_signal_1" begin
         signal = Signals.Signed{Float64}(start=0,
                                          length=16,
