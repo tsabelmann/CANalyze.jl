@@ -104,4 +104,11 @@ using Test
             @test mask(UInt128, i, 0) == mask(UInt128, i)
         end
     end
+
+    @testset "bit_mask_1" begin
+        for T in [UInt8, UInt16, UInt32, UInt64, Int8, Int16, Int32, Int64]
+            s = 8*sizeof(T) - 1
+            @test bit_mask(T, 0:s) == full_mask(T)
+        end
+    end
 end
