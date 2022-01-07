@@ -139,4 +139,11 @@ end
         decode = Decode.decode(signal, frame)
         @test decode == 0x1A
     end
+
+    @testset "raw_7" begin
+        signal = Signals.Raw(start=3, length=16, byte_order=:big_endian)
+        frame = Frames.CANFrame(0x1FF, 0x21, 0xAB, 0xCD)
+        decode = Decode.decode(signal, frame)
+        @test decode == 0x1ABC
+    end
 end
