@@ -109,6 +109,24 @@ end
     end
 
     @testset "signed_3" begin
+        for len=1:64
+            for choice=1:64-len
+                m = Utils.bit_mask(Int64, len-1, rand(0:(len-1), choice)...)
+                signal = Signals.Signed{Float64}(start=0,
+                                                 length=len,
+                                                 factor=2.0,
+                                                 offset=1337,
+                                                 byte_order=:little_endian)
+                frame = Frames.CANFrame(0x1FF, Utils.to_bytes(m))
+                decode = Decode.decode(signal, frame)
+                value = m + ~Utils.mask(Int64, len)
+                value = value * Signals.factor(signal) + Signals.offset(signal)
+                @test decode == value
+            end
+        end
+    end
+
+    @testset "signed_4" begin
         signal = Signals.Signed{Float64}(start=7, length=8, factor=set=1337,
                                          byte_order=:big_endian)
         frame = Frames.CANFrame(0x1FF, 0xFE)
