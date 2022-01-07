@@ -1,9 +1,7 @@
 name = "CANalyze"
 uuid = "2dc4fe6c-d2be-46ad-ace5-0bbcd4825534"
 authors = ["Tim Lucas Sabelmann"]
-version = "1.4.0"
-
-[deps]
+version = "1.5.0"
 
 [compat]
 julia = "1.5.3"
