@@ -1,10 +1,10 @@
-using CANalyze.Signals
-import CANalyze.Messages
 using Test
 
 @info "CANalyze.Messages tests..."
-
 @testset "message" begin
+    import CANalyze.Signals
+    import CANalyze.Messages
+
     @testset "message_1" begin
         signal1 = Signals.NamedSignal("A", nothing, nothing, Signals.Unsigned(0, 32, 1, 0, :little_endian))
         signal2 = Signals.NamedSignal("B", nothing, nothing, Signals.Unsigned(40, 17, 2, 20, :big_endian))

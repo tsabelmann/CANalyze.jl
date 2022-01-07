@@ -1,9 +1,7 @@
 name = "CANalyze"
 uuid = "2dc4fe6c-d2be-46ad-ace5-0bbcd4825534"
 authors = ["Tim Lucas Sabelmann"]
-version = "1.4.0"
-
-[deps]
+version = "1.5.3"
 
 [compat]
 julia = "1.5.3"
@@ -13,4 +11,4 @@ Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
 Random = "9a3f8284-a2c9-5f02-9a11-845980a1fd5c"
 
 [targets]
-test = ["Test"]
+test = ["Test", "Random"]

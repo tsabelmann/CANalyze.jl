@@ -1,11 +1,11 @@
-using CANalyze.Signals
-import CANalyze.Messages
-import CANalyze.Databases
 using Test
 
 @info "CANalyze.Databases tests..."
-
 @testset "database" begin
+    import CANalyze.Signals
+    import CANalyze.Messages
+    import CANalyze.Databases
+
     @testset "database_1" begin
         signal1 = Signals.NamedSignal("A", nothing, nothing, Signals.Unsigned(0, 32, 1, 0, :little_endian))
         signal2 = Signals.NamedSignal("B", nothing, nothing, Signals.Unsigned(40, 17, 2, 20, :big_endian))
