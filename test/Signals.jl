@@ -1,9 +1,9 @@
-using CANalyze.Signals
 using Test
 
 @info "CANalyze.Signals tests..."
-
 @testset "bit_signal" begin
+    using CANalyze.Signals
+
     @testset "bit_signal_1" begin
         signal = Bit(20)
         @test true
@@ -31,6 +31,8 @@ using Test
 end
 
 @testset "unsigned_signal" begin
+    using CANalyze.Signals
+
     @testset "unsigned_signal_1" begin
         signal = Signals.Unsigned(0, 8, 1.0, 0.0, :little_endian)
         @test true
@@ -93,6 +95,8 @@ end
 end
 
 @testset "signed_signal" begin
+    using CANalyze.Signals
+
     @testset "signed_signal_1" begin
         signal = Signals.Signed(0, 8, 1.0, 0.0, :little_endian)
         @test true
@@ -155,6 +159,8 @@ end
 end
 
 @testset "float16_signal" begin
+    using CANalyze.Signals
+
     @testset "float16_signal_1" begin
         signal = Signals.Float16Signal(0)
         @test true
@@ -210,6 +216,8 @@ end
 end
 
 @testset "float32_signal" begin
+    using CANalyze.Signals
+
     @testset "float32_signal_1" begin
         signal = Signals.Float32Signal(0)
         @test true
@@ -265,6 +273,8 @@ end
 end
 
 @testset "float64_signal" begin
+    using CANalyze.Signals
+
     @testset "float64_signal_1" begin
         signal = Signals.Float64Signal(0)
         @test true
@@ -321,6 +331,8 @@ end
 
 
 @testset "float_signal" begin
+    using CANalyze.Signals
+
     @testset "float_signal_1" begin
         signal = Signals.FloatSignal(start=0, factor=2, offset=-1337,
                                      byte_order=:big_endian)
@@ -331,6 +343,8 @@ end
 end
 
 @testset "raw_signal" begin
+    using CANalyze.Signals
+
     @testset "raw_signal_1" begin
         signal = Signals.Raw(0, 8, :little_endian)
         @test true
@@ -372,6 +386,8 @@ end
 
 
 @testset "named_signal" begin
+    using CANalyze.Signals
+
     @testset "named_signal_1" begin
         s = Signals.Raw(0, 8, :little_endian)
         signal = Signals.NamedSignal("ABC", nothing, nothing, s)
@@ -437,6 +453,8 @@ end
 end
 
 @testset "bits" begin
+    using CANalyze.Signals
+
     @testset "bit_1" begin
         signal = Bit(42)
         bits = Signals.Bits(signal)
@@ -513,6 +531,8 @@ end
 end
 
 @testset "share_bits" begin
+    using CANalyze.Signals
+
     @testset "share_bits_1" begin
         sig1 = Signals.Float16Signal(0; byte_order=:little_endian)
         sig2 = Signals.Float16Signal(0; byte_order=:little_endian)
@@ -533,6 +553,8 @@ end
 end
 
 @testset "overlap" begin
+    using CANalyze.Signals
+
     @testset "overlap_1" begin
         sig1 = Signals.Float16Signal(0; byte_order=:little_endian)
         sig2 = Signals.Float16Signal(0; byte_order=:little_endian)
@@ -549,6 +571,8 @@ end
 end
 
 @testset "check" begin
+    using CANalyze.Signals
+
     @testset "bit_1" begin
         signal = Signals.Bit(0)
         @test Signals.check(signal, UInt8(1))
@@ -627,6 +651,8 @@ end
 end
 
 @testset "equal" begin
+    using CANalyze.Signals
+
     @testset "bit_1" begin
         bit1 = Signals.Bit(20)
         bit2 = Signals.Bit(20)
