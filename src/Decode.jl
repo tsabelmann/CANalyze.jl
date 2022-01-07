@@ -70,7 +70,7 @@ function decode(signal::Signals.Unsigned{T}, can_frame::Frames.CANFrame) where {
 
         start = 8*start_byte + (7 - start_bit_in_byte)
         new_shift = 8Frames.dlc(can_frame) - start - length
-        
+
         if new_shift < 0
             throw(DomainError(new_shift, "The bits cannot be selected"))
         end
