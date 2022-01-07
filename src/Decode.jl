@@ -31,7 +31,7 @@ end
 function decode(signal::Signals.Bit, can_frame::Frames.CANFrame)::Bool
     start = Signals.start(signal)
 
-    if start >= 8Frames.dlc(data)
+    if start >= 8Frames.dlc(can_frame)
         throw(DomainError(start_bit, "CANFrame does not have data at bit position"))
     else
         mask = Utils.mask(UInt64, 1, start)
@@ -68,11 +68,9 @@ function decode(signal::Signals.Unsigned{T}, can_frame::Frames.CANFrame) where {
         start_bit_in_byte = start % 8
         start_byte = div(start, 8)
 
-        if start_bit_in_byte != 7 && start_bit_in_byte != 0
-            start = 8*start_byte + (7 - start_bit_in_byte)
-        end
-
+        start = 8*start_byte + (7 - start_bit_in_byte)
         new_shift = 8Frames.dlc(can_frame) - start - length
+
         if new_shift < 0
             throw(DomainError(new_shift, "The bits cannot be selected"))
         end
@@ -84,7 +82,7 @@ function decode(signal::Signals.Unsigned{T}, can_frame::Frames.CANFrame) where {
     end
 
     value = value & Utils.mask(UInt64, length)
-    result = factor * value + offset
+    result = T(value) * factor + offset
     return result
 end
 
@@ -129,7 +127,7 @@ function decode(signal::Signals.Signed{T}, can_frame::Frames.CANFrame) where {T}
         value = value + ~Utils.mask(Int64, length)
     end
 
-    result = factor * value + offset
+    result = T(value) * factor + offset
     return result
 end
 

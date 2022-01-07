@@ -155,7 +155,7 @@ Creates a mask of type `T` with `length` number of bits.
 - `T`: the mask defined by `length`
 """
 function mask(::Type{T}, length::UInt8)::T where {T <: Integer}
-    ret::T = zero(T)
+    ret = zero(T)
     if length > 0
         for i in 1:(length-1)
             ret += 1
@@ -270,7 +270,46 @@ function zero_mask(::Type{T})::T where {T <: Integer}
     return zero(T)
 end
 
+"""
+    bit_mask(::Type{T}, bits::Set{UInt16}) where {T <: Integer} -> T
+
+Creates a bit mask of type `T` where every bit inside `bits` is set.
+
+# Arguments
+- `Type{T}`: the type of the mask
+- `bits::Set{UInt16}`: the set of bits we want to set
+
+# Returns
+- `T`: the mask
+
+# Examples
+```jldoctest
+using CANalyze.Utils
+m = Utils.bit_mask(UInt8, Set{UInt16}([0,1,2,3,4,5,6,7]))
+
+# output
+0xff
+```
+"""
+function bit_mask(::Type{T}, bits::Set{UInt16})::T where {T <: Integer}
+    result = zero(T)
+    for bit in bits
+        result |= mask(T, 1, bit)
+    end
+    return T(result)
+end
+
+function bit_mask(::Type{T}, bits::Integer...)::T where {T}
+    bits = Set{UInt16}(bits)
+    return bit_mask(T, bits)
+end
+
+function bit_mask(::Type{S}, bits::AbstractArray{T,N})::S where {S,T,N}
+    bits = Set{UInt16}(bits)
+    return bit_mask(S, bits)
+end
+
 export to_bytes, from_bytes
 export is_little_endian, is_big_endian
-export mask, zero_mask, full_mask
+export mask, zero_mask, full_mask, bit_mask
 end
