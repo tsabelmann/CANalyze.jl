@@ -106,9 +106,16 @@ using Test
     end
 
     @testset "bit_mask_1" begin
-        for T in [UInt8, UInt16, UInt32, UInt64, Int8, Int16, Int32, Int64]
+        for T in [UInt8, UInt16, UInt32, UInt64, UInt128, Int8, Int16, Int32, Int64, Int128]
             s = 8*sizeof(T) - 1
             @test bit_mask(T, 0:s) == full_mask(T)
+        end
+    end
+
+    @testset "bit_mask_2" begin
+        for T in [UInt8, UInt16, UInt32, UInt64, UInt128, Int8, Int16, Int32, Int64, Int128]
+            s = 8*sizeof(T) - 1
+            @test bit_mask(T, s) == mask(T, 1, s)
         end
     end
 end
