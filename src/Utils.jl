@@ -155,7 +155,7 @@ Creates a mask of type `T` with `length` number of bits.
 - `T`: the mask defined by `length`
 """
 function mask(::Type{T}, length::UInt8)::T where {T <: Integer}
-    ret::T = zero(T)
+    ret = zero(T)
     if length > 0
         for i in 1:(length-1)
             ret += 1
