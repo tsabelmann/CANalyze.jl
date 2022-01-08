@@ -8,11 +8,34 @@ using Test
     import CANalyze.Messages
     import CANalyze.Decode
 
-    for start=0:63
-        m = Utils.mask(UInt64, 1, start)
-        signal = Signals.Bit(start=start)
-        frame = Frames.CANFrame(0x1FF, Utils.to_bytes(m))
-        @test Decode.decode(signal, frame)
+    @testset "bit_1" begin
+        for start=0:63
+            m = Utils.mask(UInt64, 1, start)
+            signal = Signals.Bit(start=start)
+            frame = Frames.CANFrame(0x1FF, Utils.to_bytes(m))
+            @test Decode.decode(signal, frame)
+        end
+    end
+
+    @testset "bit_2" begin
+        for start=1:63
+            m = Utils.mask(UInt64, 1, start)
+            signal = Signals.Bit(start=start-1)
+            frame = Frames.CANFrame(0x1FF, Utils.to_bytes(m))
+            @test !Decode.decode(signal, frame)
+        end
+    end
+
+    @testset "bit_3" begin
+        signal = Signals.Bit(start=8)
+        frame = Frames.CANFrame(0x1FF, 1)
+        @test_throws DomainError Decode.decode(signal, frame)
+    end
+
+    @testset "bit_4" begin
+        signal = Signals.Bit(start=8)
+        frame = Frames.CANFrame(0x1FF, 1)
+        @test Decode.decode(signal, frame, nothing) == nothing
     end
 end
 
@@ -27,9 +50,7 @@ end
         for start=0:63
             for len=1:(64-start)
                 m = Utils.mask(UInt64, len, start)
-                signal = Signals.Unsigned{Float64}(start=start,
-                                                   length=len,
-                                                   factor=2.0,
+                signal = Signals.Unsigned{Float64}(start=start, length=len, factor=2.0,
                                                    offset=1337,
                                                    byte_order=:little_endian)
                 frame = Frames.CANFrame(0x1FF, Utils.to_bytes(m))
@@ -41,10 +62,7 @@ end
     end
 
     @testset "unsigned_2" begin
-        signal = Signals.Unsigned{Float64}(start=7,
-                                           length=8,
-                                           factor=2.0,
-                                           offset=1337,
+        signal = Signals.Unsigned{Float64}(start=7, length=8, factor=2.0, offset=1337,
                                            byte_order=:big_endian)
         frame = Frames.CANFrame(0x1FF, [i for i=1:8])
         decode = Decode.decode(signal, frame)
@@ -53,10 +71,7 @@ end
     end
 
     @testset "unsigned_3" begin
-        signal = Signals.Unsigned{Float64}(start=7,
-                                           length=16,
-                                           factor=2.0,
-                                           offset=1337,
+        signal = Signals.Unsigned{Float64}(start=7, length=16, factor=2.0, offset=1337,
                                            byte_order=:big_endian)
         frame = Frames.CANFrame(0x1FF, 0xAB, 0xCD)
         decode = Decode.decode(signal, frame)
@@ -65,15 +80,26 @@ end
     end
 
     @testset "unsigned_4" begin
-        signal = Signals.Unsigned{Float64}(start=7,
-                                           length=24,
-                                           factor=2.0,
-                                           offset=1337,
+        signal = Signals.Unsigned{Float64}(start=7, length=24, factor=2.0, offset=1337,
                                            byte_order=:big_endian)
         frame = Frames.CANFrame(0x1FF, 0xAB, 0xCD, 0xEF)
         decode = Decode.decode(signal, frame)
         value = 0xABCDEF * Signals.factor(signal) + Signals.offset(signal)
         @test decode == value
+    end
+
+    @testset "unsigned_5" begin
+        signal = Signals.Unsigned{Float64}(start=8, length=1, factor=2.0, offset=1337,
+                                           byte_order=:little_endian)
+        frame = Frames.CANFrame(0x1FF, 0x01)
+        @test_throws DomainError Decode.decode(signal, frame)
+    end
+
+    @testset "unsigned_6" begin
+        signal = Signals.Unsigned{Float64}(start=6, length=8, factor=2.0, offset=1337,
+                                           byte_order=:big_endian)
+        frame = Frames.CANFrame(0x1FF, 0x01)
+        @test_throws DomainError Decode.decode(signal, frame)
     end
 end
 
@@ -89,9 +115,7 @@ end
         for start=0:62
             for len=1:(64-start)
                 m = Utils.mask(UInt64, len-1, start)
-                signal = Signals.Signed{Float64}(start=start,
-                                                 length=len,
-                                                 factor=2.0,
+                signal = Signals.Signed{Float64}(start=start, length=len, factor=2.0,
                                                  offset=1337,
                                                  byte_order=:little_endian)
                 frame = Frames.CANFrame(0x1FF, Utils.to_bytes(m))
@@ -106,9 +130,7 @@ end
         for start=0:63
             for len=1:(64-start)
                 m = Utils.mask(UInt64, len, start)
-                signal = Signals.Signed{Float64}(start=start,
-                                                 length=len,
-                                                 factor=2.0,
+                signal = Signals.Signed{Float64}(start=start, length=len, factor=2.0,
                                                  offset=1337,
                                                  byte_order=:little_endian)
                 frame = Frames.CANFrame(0x1FF, Utils.to_bytes(m))
@@ -124,9 +146,7 @@ end
         for len=1:64
             for choice=1:64-len
                 m = Utils.bit_mask(Int64, len-1, rand(0:(len-1), choice)...)
-                signal = Signals.Signed{Float64}(start=0,
-                                                 length=len,
-                                                 factor=2.0,
+                signal = Signals.Signed{Float64}(start=0, length=len, factor=2.0,
                                                  offset=1337,
                                                  byte_order=:little_endian)
                 frame = Frames.CANFrame(0x1FF, Utils.to_bytes(m))
@@ -146,8 +166,91 @@ end
         value = -2 * Signals.factor(signal) + Signals.offset(signal)
         @test decode == value
     end
+
+    @testset "signed_5" begin
+        signal = Signals.Signed{Float64}(start=8, length=1, factor=2.0, offset=1337,
+                                         byte_order=:little_endian)
+        frame = Frames.CANFrame(0x1FF, 0x01)
+        @test_throws DomainError Decode.decode(signal, frame)
+    end
+
+    @testset "signed_6" begin
+        signal = Signals.Signed{Float64}(start=6, length=8, factor=2.0, offset=1337,
+                                         byte_order=:big_endian)
+        frame = Frames.CANFrame(0x1FF, 0x01)
+        @test_throws DomainError Decode.decode(signal, frame)
+    end
 end
 
+@testset "float_signal" begin
+    import CANalyze.Utils
+    import CANalyze.Frames
+    import CANalyze.Signals
+    import CANalyze.Messages
+    import CANalyze.Decode
+    using Random
+
+    @testset "float_signal_1" begin
+        for T in [Float16, Float32, Float64]
+            data = [i for i=0:(sizeof(T)-1)]
+            signal = Signals.FloatSignal{T}(start=0, factor=2.0, offset=1337,
+                                            byte_order=:little_endian)
+            frame = Frames.CANFrame(0x1FF, data)
+            decode = Decode.decode(signal, frame)
+            value = reinterpret(T, data)[1] * Signals.factor(signal) + Signals.offset(signal)
+            @test decode == value
+        end
+    end
+
+    @testset "float_signal_2" begin
+        for T in [Float16, Float32, Float64]
+            data = [i for i=0:(sizeof(T)-1)]
+            signal = Signals.FloatSignal{T}(start=7, factor=2.0, offset=1337,
+                                            byte_order=:big_endian)
+            frame = Frames.CANFrame(0x1FF, data)
+            decode = Decode.decode(signal, frame)
+            value = reinterpret(T, reverse(data))[1] * Signals.factor(signal)
+            value += Signals.offset(signal)
+            @test decode == value
+        end
+    end
+
+    @testset "float_signal_3" begin
+        signal = Signals.Float16Signal(start=1, byte_order=:little_endian)
+        frame = Frames.CANFrame(0x1FF, 0x01, 0x02)
+        @test_throws DomainError Decode.decode(signal, frame)
+    end
+
+    @testset "float_signal_4" begin
+        signal = Signals.Float16Signal(start=6, byte_order=:big_endian)
+        frame = Frames.CANFrame(0x1FF, 0x01, 0x02)
+        @test_throws DomainError Decode.decode(signal, frame)
+    end
+
+    @testset "float_signal_5" begin
+        signal = Signals.Float32Signal(start=1, byte_order=:little_endian)
+        frame = Frames.CANFrame(0x1FF, 0x01, 0x02, 0x03, 0x04)
+        @test_throws DomainError Decode.decode(signal, frame)
+    end
+
+    @testset "float_signal_6" begin
+        signal = Signals.Float32Signal(start=6, byte_order=:big_endian)
+        frame = Frames.CANFrame(0x1FF, 0x01, 0x02, 0x03, 0x04)
+        @test_throws DomainError Decode.decode(signal, frame)
+    end
+
+    @testset "float_signal_7" begin
+        signal = Signals.Float64Signal(start=1, byte_order=:little_endian)
+        frame = Frames.CANFrame(0x1FF, 0:7)
+        @test_throws DomainError Decode.decode(signal, frame)
+    end
+
+    @testset "float_signal_8" begin
+        signal = Signals.Float64Signal(start=6, byte_order=:big_endian)
+        frame = Frames.CANFrame(0x1FF, 0:7)
+        @test_throws DomainError Decode.decode(signal, frame)
+    end
+end
 
 @testset "raw" begin
     import CANalyze.Utils
@@ -210,6 +313,18 @@ end
         decode = Decode.decode(signal, frame)
         @test decode == 0x1ABC
     end
+
+    @testset "raw_8" begin
+        signal = Signals.Raw(start=8, length=1, byte_order=:little_endian)
+        frame = Frames.CANFrame(0x1FF, 0x01)
+        @test_throws DomainError Decode.decode(signal, frame)
+    end
+
+    @testset "raw_9" begin
+        signal = Signals.Raw(start=6, length=8, byte_order=:big_endian)
+        frame = Frames.CANFrame(0x1FF, 0x01)
+        @test_throws DomainError Decode.decode(signal, frame)
+    end
 end
 
 @testset "named_signal" begin
@@ -228,6 +343,30 @@ end
         named_signal = Signals.NamedSignal("SIG", nothing, nothing, signal)
         frame = Frames.CANFrame(0x1FF, 0x01, 0x02)
         @test Decode.decode(signal, frame) == Decode.decode(named_signal, frame)
+    end
+
+    @testset "named_signal_2" begin
+        signal = Signals.Signed{Float64}(start=1,
+                                         length=16,
+                                         factor=2.0,
+                                         offset=1337,
+                                         byte_order=:little_endian)
+        named_signal = Signals.NamedSignal("SIG", nothing, nothing, signal)
+        frame = Frames.CANFrame(0x1FF, 0x01, 0x02)
+        @test_throws DomainError Decode.decode(signal, frame)
+        @test Decode.decode(named_signal, frame) == nothing
+    end
+
+    @testset "named_signal_3" begin
+        signal = Signals.Signed{Float64}(start=1,
+                                         length=16,
+                                         factor=2.0,
+                                         offset=1337,
+                                         byte_order=:little_endian)
+        named_signal = Signals.NamedSignal("SIG", nothing, 42.0, signal)
+        frame = Frames.CANFrame(0x1FF, 0x01, 0x02)
+        @test_throws DomainError Decode.decode(signal, frame)
+        @test Decode.decode(named_signal, frame) == 42
     end
 end
 
