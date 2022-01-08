@@ -91,12 +91,9 @@ function decode(signal::Signals.Signed{T}, can_frame::Frames.CANFrame) where {T}
     byte_order = Signals.byte_order(signal)
 
     if byte_order == :little_endian
-        if start >= 8*Frames.dlc(can_frame)
-            throw(DomainError())
-        end
-
-        if start + length - 1 >= 8 * Frames.dlc(can_frame)
-            throw(DomainError())
+        end_bit = start + length - 1
+        if end_bit >= 8 * Frames.dlc(can_frame)
+            throw(DomainError(end_bit, "The bit($end_bit) cannot be selected"))
         end
 
         value = Utils.from_bytes(Int64, Frames.data(can_frame))
@@ -106,7 +103,7 @@ function decode(signal::Signals.Signed{T}, can_frame::Frames.CANFrame) where {T}
         start_byte = div(start, 8)
 
         start = 8*start_byte + (7 - start_bit_in_byte)
-        new_shift = 8*Frames.dlc(can_frame) - start - length
+        new_shift = Int64(8*Frames.dlc(can_frame)) - Int64(start) - Int64(length)
 
         if new_shift < 0
             throw(DomainError(new_shift, "The bits cannot be selected"))
