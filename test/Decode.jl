@@ -182,6 +182,75 @@ end
     end
 end
 
+@testset "float_signal" begin
+    import CANalyze.Utils
+    import CANalyze.Frames
+    import CANalyze.Signals
+    import CANalyze.Messages
+    import CANalyze.Decode
+    using Random
+
+    @testset "float_signal_1" begin
+        for T in [Float16, Float32, Float64]
+            data = [i for i=0:(sizeof(T)-1)]
+            signal = Signals.FloatSignal{T}(start=0, factor=2.0, offset=1337,
+                                            byte_order=:little_endian)
+            frame = Frames.CANFrame(0x1FF, data)
+            decode = Decode.decode(signal, frame)
+            value = reinterpret(T, data)[1] * Signals.factor(signal) + Signals.offset(signal)
+            @test decode == value
+        end
+    end
+
+    @testset "float_signal_2" begin
+        for T in [Float16, Float32, Float64]
+            data = [i for i=0:(sizeof(T)-1)]
+            signal = Signals.FloatSignal{T}(start=7, factor=2.0, offset=1337,
+                                            byte_order=:big_endian)
+            frame = Frames.CANFrame(0x1FF, data)
+            decode = Decode.decode(signal, frame)
+            value = reinterpret(T, reverse(data))[1] * Signals.factor(signal)
+            value += Signals.offset(signal)
+            @test decode == value
+        end
+    end
+
+    @testset "float_signal_3" begin
+        signal = Signals.Float16Signal(start=1, byte_order=:little_endian)
+        frame = Frames.CANFrame(0x1FF, 0x01, 0x02)
+        @test_throws DomainError Decode.decode(signal, frame)
+    end
+
+    @testset "float_signal_4" begin
+        signal = Signals.Float16Signal(start=6, byte_order=:big_endian)
+        frame = Frames.CANFrame(0x1FF, 0x01, 0x02)
+        @test_throws DomainError Decode.decode(signal, frame)
+    end
+
+    @testset "float_signal_5" begin
+        signal = Signals.Float32Signal(start=1, byte_order=:little_endian)
+        frame = Frames.CANFrame(0x1FF, 0x01, 0x02, 0x03, 0x04)
+        @test_throws DomainError Decode.decode(signal, frame)
+    end
+
+    @testset "float_signal_6" begin
+        signal = Signals.Float32Signal(start=6, byte_order=:big_endian)
+        frame = Frames.CANFrame(0x1FF, 0x01, 0x02, 0x03, 0x04)
+        @test_throws DomainError Decode.decode(signal, frame)
+    end
+
+    @testset "float_signal_7" begin
+        signal = Signals.Float64Signal(start=1, byte_order=:little_endian)
+        frame = Frames.CANFrame(0x1FF, 0:7)
+        @test_throws DomainError Decode.decode(signal, frame)
+    end
+
+    @testset "float_signal_8" begin
+        signal = Signals.Float64Signal(start=6, byte_order=:big_endian)
+        frame = Frames.CANFrame(0x1FF, 0:7)
+        @test_throws DomainError Decode.decode(signal, frame)
+    end
+end
 
 @testset "raw" begin
     import CANalyze.Utils
@@ -274,6 +343,30 @@ end
         named_signal = Signals.NamedSignal("SIG", nothing, nothing, signal)
         frame = Frames.CANFrame(0x1FF, 0x01, 0x02)
         @test Decode.decode(signal, frame) == Decode.decode(named_signal, frame)
+    end
+
+    @testset "named_signal_2" begin
+        signal = Signals.Signed{Float64}(start=1,
+                                         length=16,
+                                         factor=2.0,
+                                         offset=1337,
+                                         byte_order=:little_endian)
+        named_signal = Signals.NamedSignal("SIG", nothing, nothing, signal)
+        frame = Frames.CANFrame(0x1FF, 0x01, 0x02)
+        @test_throws DomainError Decode.decode(signal, frame)
+        @test Decode.decode(named_signal, frame) == nothing
+    end
+
+    @testset "named_signal_3" begin
+        signal = Signals.Signed{Float64}(start=1,
+                                         length=16,
+                                         factor=2.0,
+                                         offset=1337,
+                                         byte_order=:little_endian)
+        named_signal = Signals.NamedSignal("SIG", nothing, 42.0, signal)
+        frame = Frames.CANFrame(0x1FF, 0x01, 0x02)
+        @test_throws DomainError Decode.decode(signal, frame)
+        @test Decode.decode(named_signal, frame) == 42
     end
 end
 
