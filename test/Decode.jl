@@ -8,11 +8,34 @@ using Test
     import CANalyze.Messages
     import CANalyze.Decode
 
-    for start=0:63
-        m = Utils.mask(UInt64, 1, start)
-        signal = Signals.Bit(start=start)
-        frame = Frames.CANFrame(0x1FF, Utils.to_bytes(m))
-        @test Decode.decode(signal, frame)
+    @testset "bit_1" begin
+        for start=0:63
+            m = Utils.mask(UInt64, 1, start)
+            signal = Signals.Bit(start=start)
+            frame = Frames.CANFrame(0x1FF, Utils.to_bytes(m))
+            @test Decode.decode(signal, frame)
+        end
+    end
+
+    @testset "bit_2" begin
+        for start=1:63
+            m = Utils.mask(UInt64, 1, start)
+            signal = Signals.Bit(start=start-1)
+            frame = Frames.CANFrame(0x1FF, Utils.to_bytes(m))
+            @test !Decode.decode(signal, frame)
+        end
+    end
+
+    @testset "bit_3" begin
+        signal = Signals.Bit(start=8)
+        frame = Frames.CANFrame(0x1FF, 1)
+        @test_throws DomainError Decode.decode(signal, frame)
+    end
+
+    @testset "bit_4" begin
+        signal = Signals.Bit(start=8)
+        frame = Frames.CANFrame(0x1FF, 1)
+        @test Decode.decode(signal, frame, nothing) == nothing
     end
 end
 
