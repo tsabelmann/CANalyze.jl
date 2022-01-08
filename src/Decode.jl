@@ -31,7 +31,7 @@ end
 function decode(signal::Signals.Bit, can_frame::Frames.CANFrame)::Bool
     start = Signals.start(signal)
 
-    if start >= 8Frames.dlc(can_frame)
+    if start >= 8*Frames.dlc(can_frame)
         throw(DomainError(start, "CANFrame does not have data at bit position"))
     else
         mask = Utils.mask(UInt64, 1, start)
@@ -66,7 +66,7 @@ function decode(signal::Signals.Unsigned{T}, can_frame::Frames.CANFrame) where {
         start_byte = div(start, 8)
 
         start = 8*start_byte + (7 - start_bit_in_byte)
-        new_shift = Int64(8Frames.dlc(can_frame)) - Int64(start) - Int64(length)
+        new_shift = Int64(8*Frames.dlc(can_frame)) - Int64(start) - Int64(length)
 
         if new_shift < 0
             throw(DomainError(new_shift, "The bits cannot be selected"))
@@ -135,12 +135,9 @@ function decode(signal::Signals.FloatSignal{T}, can_frame::Frames.CANFrame) wher
     byte_order = Signals.byte_order(signal)
 
     if byte_order == :little_endian
-        if start >= 8*Frames.dlc(can_frame)
-            throw(DomainError())
-        end
-
-        if start + length - 1 >= 8 * Frames.dlc(can_frame)
-            throw(DomainError())
+        end_bit = start + length - 1
+        if end_bit >= 8 * Frames.dlc(can_frame)
+            throw(DomainError(end_bit, "The bit($end_bit) cannot be selected"))
         end
 
         value = Utils.from_bytes(UInt64, Frames.data(can_frame))
@@ -150,7 +147,7 @@ function decode(signal::Signals.FloatSignal{T}, can_frame::Frames.CANFrame) wher
         start_byte = div(start, 8)
 
         start = 8*start_byte + (7 - start_bit_in_byte)
-        new_shift = 8Frames.dlc(can_frame) - start - length
+        new_shift = Int64(8*Frames.dlc(can_frame)) - Int64(start) - Int64(length)
 
         if new_shift < 0
             throw(DomainError(new_shift, "The bits cannot be selected"))
@@ -176,8 +173,9 @@ function decode(signal::Signals.Raw, can_frame::Frames.CANFrame)::UInt64
     byte_order = Signals.byte_order(signal)
 
     if byte_order == :little_endian
-        if start + length - 1 >= 8 * Frames.dlc(can_frame)
-            throw(DomainError())
+        end_bit = start + length - 1
+        if end_bit >= 8 * Frames.dlc(can_frame)
+            throw(DomainError(end_bit, "The bit($end_bit) cannot be selected"))
         end
 
         value = Utils.from_bytes(UInt64, Frames.data(can_frame))
@@ -187,7 +185,7 @@ function decode(signal::Signals.Raw, can_frame::Frames.CANFrame)::UInt64
         start_byte = div(start, 8)
 
         start = 8*start_byte + (7 - start_bit_in_byte)
-        new_shift::Int16 = 8*Frames.dlc(can_frame) - start - length
+        new_shift::Int16 = Int64(8*Frames.dlc(can_frame)) - Int64(start) - Int64(length)
 
         if new_shift < 0
             throw(DomainError(new_shift, "The bits cannot be selected"))
