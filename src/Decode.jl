@@ -6,7 +6,8 @@ import ..Messages
 
 """
 """
-function decode(signal::Signals.NamedSignal{T}, can_frame::Frames.CANFrame)::T where {T}
+function decode(signal::Signals.NamedSignal{T},
+                can_frame::Frames.CANFrame)::Union{Nothing,T} where {T}
     try
         sig = Signals.signal(signal)
         return decode(sig, can_frame)
