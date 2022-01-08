@@ -244,6 +244,18 @@ end
         decode = Decode.decode(signal, frame)
         @test decode == 0x1ABC
     end
+
+    @testset "raw_8" begin
+        signal = Signals.Raw(start=8, length=1, byte_order=:little_endian)
+        frame = Frames.CANFrame(0x1FF, 0x01)
+        @test_throws DomainError Decode.decode(signal, frame)
+    end
+
+    @testset "raw_9" begin
+        signal = Signals.Raw(start=6, length=8, byte_order=:big_endian)
+        frame = Frames.CANFrame(0x1FF, 0x01)
+        @test_throws DomainError Decode.decode(signal, frame)
+    end
 end
 
 @testset "named_signal" begin
